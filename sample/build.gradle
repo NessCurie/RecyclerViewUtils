@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "org.nesscurie.sample"
-        minSdkVersion 16
+        minSdkVersion 9
         targetSdkVersion 25
         versionCode 1
         versionName version
@@ -25,5 +25,5 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile project(':library')
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
+    //compile 'com.github.NessCurie:RecyclerViewUtils:-SNAPSHOT'
 }
