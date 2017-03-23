@@ -25,7 +25,6 @@ import java.util.List;
  * 可以在 {@link #openItemTouch(RecyclerView, boolean, boolean, SwipyRefreshLayout)}第二个参数传为false
  * 如果需要设置item中某个元素为触发拖动的元素,在{@link IType#setData(MViewHolder, Object, int)}中使用holder
  * 中的{@link MViewHolder#setDragListener(int)} 设置
- *
  */
 public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements ItemTouchDataCallBack {
 
@@ -58,7 +57,7 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
         if (!isMoreOneType()) {
             return 0;
         } else {
-            for (int i = types.size() - 1; i >= 0; i--) {
+            for (int i = 0; i < types.size(); i++) {
                 if (types.valueAt(i).isThisTypeItem(list.get(position), position)) {
                     return types.keyAt(i);
                 }
@@ -107,7 +106,7 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
     /**
      * 可重写此方法,设置哪些可以点击哪些不可以
      */
-    public boolean isEnabled(int viewType) {
+    public boolean isClickEnabled(int viewType) {
         return true;
     }
 
@@ -118,7 +117,7 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
      * @param viewType   view的类型
      */
     private void setListener(final MViewHolder viewHolder, int viewType, final int position) {
-        if (!isEnabled(viewType)) return;
+        if (!isClickEnabled(viewType)) return;
         viewHolder.getItemView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,14 +155,14 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
     }
 
     /**
-     * 在集合指定位置添加type,当位置上已存在type时不会添加
+     * 在集合添加指定type和type的实现,当指定type已存在时不会添加
      *
-     * @param typeP 集合索引
-     * @param type  item的type  {@link IType}
+     * @param type 指定的type
+     * @param iType  item的type实现  {@link IType}
      */
-    public void addType(int typeP, IType<T> type) {
-        if (types.get(typeP) == null) {
-            types.put(typeP, type);
+    public void addType(int type, IType<T> iType) {
+        if (types.get(type) == null) {
+            types.put(type, iType);
         }
     }
 

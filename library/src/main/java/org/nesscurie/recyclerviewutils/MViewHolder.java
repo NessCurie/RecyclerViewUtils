@@ -71,7 +71,7 @@ public class MViewHolder extends RecyclerView.ViewHolder {
      *
      * @param id 控件
      */
-    public void setDragListener(int id) {
+    public MViewHolder setDragListener(int id) {
         View view = getView(id);
         if (view != null) {
             view.setOnTouchListener(new View.OnTouchListener() {
@@ -79,70 +79,84 @@ public class MViewHolder extends RecyclerView.ViewHolder {
                 public boolean onTouch(View v, MotionEvent event) {
                     if (MotionEventCompat.getActionMasked(event) ==
                             MotionEvent.ACTION_DOWN) {
-                        helper.startDrag(MViewHolder.this);
+                        if (helper != null) {
+                            helper.startDrag(MViewHolder.this);
+                        }
                     }
                     return false;
                 }
             });
         }
+        return this;
     }
 
-    public void setText(int viewId, String text) {
+    public MViewHolder setText(int viewId, String text) {
         TextView tv = (TextView) getView(viewId);
         if (tv != null) tv.setText(text);
+        return this;
     }
 
-    public void setImageResource(int viewId, int resId) {
+    public MViewHolder setImageResource(int viewId, int resId) {
         ImageView iv = (ImageView) getView(viewId);
         if (iv != null) iv.setImageResource(resId);
+        return this;
     }
 
-    public void setImageBitmap(int viewId, Bitmap bitmap) {
+    public MViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
         ImageView iv = (ImageView) getView(viewId);
         if (iv != null) iv.setImageBitmap(bitmap);
+        return this;
     }
 
-    public void setImageDrawable(int viewId, Drawable drawable) {
+    public MViewHolder setImageDrawable(int viewId, Drawable drawable) {
         ImageView iv = (ImageView) getView(viewId);
         if (iv != null) iv.setImageDrawable(drawable);
+        return this;
     }
 
-    public void setBackgroundColor(int viewId, int color) {
+    public MViewHolder setBackgroundColor(int viewId, int color) {
         ImageView iv = (ImageView) getView(viewId);
         if (iv != null) iv.setBackgroundColor(color);
+        return this;
     }
 
-    public void setBackgroundResource(int viewId, int backgroundRes) {
+    public MViewHolder setBackgroundResource(int viewId, int backgroundRes) {
         View view = getView(viewId);
         if (view != null) view.setBackgroundResource(backgroundRes);
+        return this;
     }
 
-    public void setTextColor(int viewId, int textColor) {
+    public MViewHolder setTextColor(int viewId, int textColor) {
         TextView tv = (TextView) getView(viewId);
         if (tv != null) tv.setTextColor(textColor);
+        return this;
     }
 
-    public void setTextColorRes(int viewId, int textColorRes) {
+    public MViewHolder setTextColorRes(int viewId, int textColorRes) {
         TextView tv = (TextView) getView(viewId);
         if (tv != null) tv.setTextColor(context.getResources().getColor(textColorRes));
+        return this;
     }
 
-    public void linkify(int viewId) {
+    public MViewHolder linkify(int viewId) {
         TextView tv = (TextView) getView(viewId);
         if (tv != null) Linkify.addLinks(tv, Linkify.ALL);
+        return this;
     }
 
-    public void setAlpha(int viewId, float value) {
+    public MViewHolder setAlpha(int viewId, float value) {
         View view = getView(viewId);
         if (view != null) view.setAlpha(value);
+        return this;
     }
 
-    public void setVisible(int viewId, boolean visible) {
+    public MViewHolder setVisible(int viewId, boolean visible) {
         View view = getView(viewId);
         if (view != null) view.setVisibility(visible ? View.VISIBLE : View.GONE);
+        return this;
     }
 
-    public void setTypeface(Typeface typeface, int... viewIds) {
+    public MViewHolder setTypeface(Typeface typeface, int... viewIds) {
         for (int viewId : viewIds) {
             TextView view = (TextView) getView(viewId);
             if (view != null) {
@@ -150,66 +164,78 @@ public class MViewHolder extends RecyclerView.ViewHolder {
                 view.setPaintFlags(view.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
             }
         }
+        return this;
     }
 
-    public void setProgress(int viewId, int progress) {
+    public MViewHolder setProgress(int viewId, int progress) {
         ProgressBar pb = (ProgressBar) getView(viewId);
         if (pb != null) pb.setProgress(progress);
+        return this;
     }
 
-    public void setProgress(int viewId, int progress, int max) {
+    public MViewHolder setProgress(int viewId, int progress, int max) {
         ProgressBar pb = (ProgressBar) getView(viewId);
         if (pb != null) {
             pb.setMax(max);
             pb.setProgress(progress);
         }
+        return this;
     }
 
-    public void setMax(int viewId, int max) {
+    public MViewHolder setMax(int viewId, int max) {
         ProgressBar pb = (ProgressBar) getView(viewId);
         if (pb != null) pb.setMax(max);
+        return this;
     }
 
-    public void setRating(int viewId, float rating) {
+    public MViewHolder setRating(int viewId, float rating) {
         RatingBar rb = (RatingBar) getView(viewId);
         if (rb != null) rb.setRating(rating);
+        return this;
     }
 
-    public void setRating(int viewId, float rating, int max) {
+    public MViewHolder setRating(int viewId, float rating, int max) {
         RatingBar rb = (RatingBar) getView(viewId);
         if (rb != null) {
             rb.setMax(max);
             rb.setRating(rating);
         }
+        return this;
     }
 
-    public void setTag(int viewId, Object tag) {
+    public MViewHolder setTag(int viewId, Object tag) {
         View view = getView(viewId);
         if (view != null) view.setTag(tag);
+        return this;
     }
 
-    public void setTag(int viewId, int key, Object tag) {
+    public MViewHolder setTag(int viewId, int key, Object tag) {
         View view = getView(viewId);
         if (view != null) view.setTag(key, tag);
+        return this;
     }
 
-    public void setChecked(int viewId, boolean checked) {
+    public MViewHolder setChecked(int viewId, boolean checked) {
         Checkable view = (Checkable) getView(viewId);
         if (view != null) view.setChecked(checked);
+        return this;
     }
 
-    public void setOnClickListener(int viewId, View.OnClickListener listener) {
+    public MViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
         View view = getView(viewId);
         if (view != null) view.setOnClickListener(listener);
+        return this;
     }
 
-    public void setOnTouchListener(int viewId, View.OnTouchListener listener) {
+    public MViewHolder setOnTouchListener(int viewId, View.OnTouchListener listener) {
         View view = getView(viewId);
         if (view != null) view.setOnTouchListener(listener);
+        return this;
     }
 
-    public void setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
+    public MViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
         View view = getView(viewId);
         if (view != null) view.setOnLongClickListener(listener);
+        return this;
     }
 }

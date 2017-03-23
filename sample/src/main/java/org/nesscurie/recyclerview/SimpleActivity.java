@@ -60,12 +60,11 @@ public class SimpleActivity extends AppCompatActivity implements
         );
         recyclerview.addItemDecoration(new SimpleDecoration(this));  //设置分割线
         //将指定控件设置为触发拖动
-        simpleAdapter = new SimpleAdapter<String>(this,
-                R.layout.item_simple, list) {
+        simpleAdapter = new SimpleAdapter<String>(this, R.layout.item_simple, list) {
             @Override
             public void setItemData(final MViewHolder holder, String s, int position) {
-                holder.setText(R.id.tv_center, s);
-                holder.setDragListener(R.id.iv_hand);           //将指定控件设置为触发拖动
+                holder.setText(R.id.tv_center, s)
+                        .setDragListener(R.id.iv_hand);           //将指定控件设置为触发拖动
             }
         };
 

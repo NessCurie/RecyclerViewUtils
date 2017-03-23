@@ -1115,7 +1115,7 @@ public class SwipyRefreshLayout extends ViewGroup {
         return mBothDirection ? BOTH : mDirection;
     }
 
-    public void setDirection(int direction) {
+    public void setRefreshMode(int direction) {
         if (direction == BOTH) {
             mBothDirection = true;
         } else {

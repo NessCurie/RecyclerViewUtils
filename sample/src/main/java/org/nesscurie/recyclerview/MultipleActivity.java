@@ -61,13 +61,12 @@ public class MultipleActivity extends AppCompatActivity implements
         // 设置是下拉刷新还是上拉加载更多还是都有,也可以在属性中设置,此处已在属性中设置
         //swipyrefreshlayout.setRefreshMode(SwipyRefreshLayout.BOTH);
         swipyrefreshlayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
+                android.R.color.holo_green_light, android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
         swipyrefreshlayout.setProgressBackgroundColor(android.R.color.darker_gray);
         swipyrefreshlayout.setOnRefreshListener(this);
 
-        //获取recyclerView,设置各种属性
+        //获取recyclerView,设置各种属性e
         recyclerview = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerview.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -77,7 +76,12 @@ public class MultipleActivity extends AppCompatActivity implements
         );
         recyclerview.addItemDecoration(new SimpleDecoration(this));  //设置分割线
         //adapter = new BaseAdapter<>(this, list);  //不需要设置哪些是否可以点击可以直接new
-        adapter = new MultipleAdapter(this, list);  //这里继承之后将数字type不可点击
+        adapter = new BaseAdapter<String>(this, list) {
+            @Override
+            public boolean isClickEnabled(int viewType) {    //这里将数字type不可点击
+                return viewType != 1;
+            }
+        };
         adapter.addType(new IType<String>() {
             @Override
             public int getLayoutId() {
@@ -96,8 +100,8 @@ public class MultipleActivity extends AppCompatActivity implements
 
             @Override
             public void setData(MViewHolder holder, String s, int position) {
-                holder.setText(R.id.tv_center, s);
-                holder.setDragListener(R.id.iv_hand);
+                holder.setText(R.id.tv_center, s)
+                        .setDragListener(R.id.iv_hand);
             }
         });
         adapter.addType(new IType<String>() {
