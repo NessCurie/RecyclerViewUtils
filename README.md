@@ -23,7 +23,7 @@ Then, add the library to your module build.gradle
 }
 </code></pre>
 
-now latest.release is 0ea0597031
+such as release is 0ea0597031
 
 you can use:
 <pre><code>dependencies {
