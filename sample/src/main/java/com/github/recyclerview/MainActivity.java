@@ -1,4 +1,4 @@
-package org.nesscurie.recyclerview;
+package com.github.recyclerview;
 
 import android.content.Intent;
 import android.os.Bundle;

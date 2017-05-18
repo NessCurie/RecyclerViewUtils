@@ -1,4 +1,4 @@
-package org.nesscurie.recyclerviewutils.widget;
+package com.github.recyclerviewutils.widget;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -76,7 +76,7 @@ public class MaterialProgressDrawable extends Drawable implements Animatable {
     /**
      * The list of animators operating on this drawable.
      */
-    private final ArrayList<Animation> mAnimators = new ArrayList<Animation>();
+    private final ArrayList<Animation> mAnimators = new ArrayList<>();
 
     /**
      * The indicator ring, used to manage animation state.
@@ -198,8 +198,6 @@ public class MaterialProgressDrawable extends Drawable implements Animatable {
      * Set the colors used in the progress animation from color resources.
      * The first color will also be the color of the bar that grows in response
      * to a user swipe gesture.
-     *
-     * @param colors
      */
     public void setColorSchemeColors(int... colors) {
         mRing.setColors(colors);
@@ -240,7 +238,7 @@ public class MaterialProgressDrawable extends Drawable implements Animatable {
     }
 
     @SuppressWarnings("unused")
-    void setRotation(float rotation) {
+    private void setRotation(float rotation) {
         mRotation = rotation;
         invalidateSelf();
     }

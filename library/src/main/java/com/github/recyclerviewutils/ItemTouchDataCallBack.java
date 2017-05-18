@@ -1,4 +1,4 @@
-package org.nesscurie.recyclerviewutils;
+package com.github.recyclerviewutils;
 
 /**
  * 用于对侧滑删除和移动时的数据的处理

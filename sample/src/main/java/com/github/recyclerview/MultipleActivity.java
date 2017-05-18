@@ -1,4 +1,4 @@
-package org.nesscurie.recyclerview;
+package com.github.recyclerview;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,11 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
-import org.nesscurie.recyclerviewutils.BaseAdapter;
-import org.nesscurie.recyclerviewutils.IType;
-import org.nesscurie.recyclerviewutils.MViewHolder;
-import org.nesscurie.recyclerviewutils.SimpleDecoration;
-import org.nesscurie.recyclerviewutils.SwipyRefreshLayout;
+import com.github.recyclerviewutils.BaseAdapter;
+import com.github.recyclerviewutils.IType;
+import com.github.recyclerviewutils.MViewHolder;
+import com.github.recyclerviewutils.SimpleDecoration;
+import com.github.recyclerviewutils.SwipyRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +63,7 @@ public class MultipleActivity extends AppCompatActivity implements
         swipyrefreshlayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light, android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-        swipyrefreshlayout.setProgressBackgroundColor(android.R.color.darker_gray);
+        swipyrefreshlayout.setProgressBackgroundColorSchemeResource(android.R.color.darker_gray);
         swipyrefreshlayout.setOnRefreshListener(this);
 
         //获取recyclerView,设置各种属性e

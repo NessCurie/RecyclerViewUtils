@@ -1,9 +1,12 @@
-package org.nesscurie.recyclerviewutils;
+package com.github.recyclerviewutils;
 
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
@@ -19,8 +22,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
 
-import org.nesscurie.recyclerviewutils.widget.CircleImageView;
-import org.nesscurie.recyclerviewutils.widget.MaterialProgressDrawable;
+import com.github.recyclerviewutils.widget.CircleImageView;
+import com.github.recyclerviewutils.widget.MaterialProgressDrawable;
 
 /**
  * The SwipeRefreshLayout should be used whenever the user can refresh the
@@ -202,7 +205,6 @@ public class SwipyRefreshLayout extends ViewGroup {
      *            progress spinner should come to rest after a successful swipe
      *            gesture.
      */
-    /*
     public void setProgressViewOffset(boolean scale, int start, int end) {
         mScale = scale;
         mCircleView.setVisibility(View.GONE);
@@ -210,7 +212,7 @@ public class SwipyRefreshLayout extends ViewGroup {
         mSpinnerFinalOffset = end;
         mUsingCustomStart = true;
         mCircleView.invalidate();
-    }*/
+    }
 
     /**
      * The refresh indicator resting position is always positioned near the top
@@ -224,12 +226,11 @@ public class SwipyRefreshLayout extends ViewGroup {
      *            progress spinner should come to rest after a successful swipe
      *            gesture.
      */
-    /*
     public void setProgressViewEndTarget(boolean scale, int end) {
         mSpinnerFinalOffset = end;
         mScale = scale;
         mCircleView.invalidate();
-    }*/
+    }
 
     /**
      * One of DEFAULT, or LARGE.
@@ -254,8 +255,6 @@ public class SwipyRefreshLayout extends ViewGroup {
 
     /**
      * Simple constructor to use when creating a SwipeRefreshLayout from code.
-     *
-     * @param context
      */
     public SwipyRefreshLayout(Context context) {
         this(context, null);
@@ -263,9 +262,6 @@ public class SwipyRefreshLayout extends ViewGroup {
 
     /**
      * Constructor that is called when inflating SwipeRefreshLayout from XML.
-     *
-     * @param context
-     * @param attrs
      */
     public SwipyRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -319,7 +315,7 @@ public class SwipyRefreshLayout extends ViewGroup {
     }
 
     private void createProgressView() {
-        mCircleView = new CircleImageView(getContext(), CIRCLE_BG_LIGHT, CIRCLE_DIAMETER / 2);
+        mCircleView = new CircleImageView(getContext(), CIRCLE_BG_LIGHT);
         mProgress = new MaterialProgressDrawable(getContext(), this);
         mProgress.setBackgroundColor(CIRCLE_BG_LIGHT);
         mCircleView.setImageDrawable(mProgress);
@@ -468,13 +464,30 @@ public class SwipyRefreshLayout extends ViewGroup {
     }
 
     /**
+     * @deprecated Use {@link #setProgressBackgroundColorSchemeResource(int)}
+     */
+    @Deprecated
+    public void setProgressBackgroundColor(int colorRes) {
+        setProgressBackgroundColorSchemeResource(colorRes);
+    }
+
+    /**
      * Set the background color of the progress spinner disc.
      *
      * @param colorRes Resource id of the color.
      */
-    public void setProgressBackgroundColor(int colorRes) {
-        mCircleView.setBackgroundColor(colorRes);
-        mProgress.setBackgroundColor(getResources().getColor(colorRes));
+    public void setProgressBackgroundColorSchemeResource(@ColorRes int colorRes) {
+        setProgressBackgroundColorSchemeColor(ContextCompat.getColor(getContext(), colorRes));
+    }
+
+    /**
+     * Set the background color of the progress spinner disc.
+     *
+     * @param color
+     */
+    public void setProgressBackgroundColorSchemeColor(@ColorInt int color) {
+        mCircleView.setBackgroundColor(color);
+        mProgress.setBackgroundColor(color);
     }
 
     /**
@@ -707,7 +720,7 @@ public class SwipyRefreshLayout extends ViewGroup {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 setTargetOffsetTopAndBottom(mOriginalOffsetTop - mCircleView.getTop(), true);
-                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                mActivePointerId = ev.getPointerId(0);
                 mIsBeingDragged = false;
                 final float initialDownY = getMotionEventY(ev, mActivePointerId);
                 if (initialDownY == -1) {
@@ -776,7 +789,7 @@ public class SwipyRefreshLayout extends ViewGroup {
     }
 
     private float getMotionEventY(MotionEvent ev, int activePointerId) {
-        final int index = MotionEventCompat.findPointerIndex(ev, activePointerId);
+        final int index = ev.findPointerIndex(activePointerId);
         if (index < 0) {
             return -1;
         }
@@ -830,17 +843,17 @@ public class SwipyRefreshLayout extends ViewGroup {
 
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
-                    mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                    mActivePointerId = ev.getPointerId(0);
                     mIsBeingDragged = false;
                     break;
 
                 case MotionEvent.ACTION_MOVE: {
-                    final int pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
+                    final int pointerIndex = ev.findPointerIndex(mActivePointerId);
                     if (pointerIndex < 0) {
                         return false;
                     }
 
-                    final float y = MotionEventCompat.getY(ev, pointerIndex);
+                    final float y = ev.getY(pointerIndex);
 
                     float overscrollTop;
                     switch (mDirection) {
@@ -893,7 +906,7 @@ public class SwipyRefreshLayout extends ViewGroup {
                                 // Animate the alpha
                                 startProgressAlphaStartAnimation();
                             }
-                            float strokeStart = (float) (adjustedPercent * .8f);
+                            float strokeStart = adjustedPercent * .8f;
                             mProgress.setStartEndTrim(0f, Math.min(MAX_PROGRESS_ANGLE, strokeStart));
                             mProgress.setArrowScale(Math.min(1f, adjustedPercent));
                         } else {
@@ -912,7 +925,7 @@ public class SwipyRefreshLayout extends ViewGroup {
                 }
                 case MotionEventCompat.ACTION_POINTER_DOWN: {
                     final int index = MotionEventCompat.getActionIndex(ev);
-                    mActivePointerId = MotionEventCompat.getPointerId(ev, index);
+                    mActivePointerId = ev.getPointerId(index);
                     break;
                 }
 
@@ -927,7 +940,7 @@ public class SwipyRefreshLayout extends ViewGroup {
                         }
                         return false;
                     }
-                    final int pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
+                    final int pointerIndex = ev.findPointerIndex(mActivePointerId);
                     final float y = MotionEventCompat.getY(ev, pointerIndex);
 
                     float overscrollTop;
@@ -1076,30 +1089,20 @@ public class SwipyRefreshLayout extends ViewGroup {
     private void setTargetOffsetTopAndBottom(int offset, boolean requiresUpdate) {
         mCircleView.bringToFront();
         mCircleView.offsetTopAndBottom(offset);
-
-//        switch (mDirection) {
-//            case BOTTOM:
-//                mCurrentTargetOffsetTop = getMeasuredHeight() - mCircleView.getMeasuredHeight();
-//                break;
-//            case TOP:
-//            default:
-//                mCurrentTargetOffsetTop  = mCircleView.getTop();
-//                break;
-//        }
         mCurrentTargetOffsetTop = mCircleView.getTop();
-        if (requiresUpdate && android.os.Build.VERSION.SDK_INT < 11) {
+        if (requiresUpdate && (android.os.Build.VERSION.SDK_INT < 11)) {
             invalidate();
         }
     }
 
     private void onSecondaryPointerUp(MotionEvent ev) {
         final int pointerIndex = MotionEventCompat.getActionIndex(ev);
-        final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+        final int pointerId = ev.getPointerId(pointerIndex);
         if (pointerId == mActivePointerId) {
             // This was our active pointer going up. Choose a new
             // active pointer and adjust accordingly.
             final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-            mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+            mActivePointerId = ev.getPointerId(newPointerIndex);
         }
     }
 
@@ -1108,7 +1111,7 @@ public class SwipyRefreshLayout extends ViewGroup {
      * triggers a refresh should implement this interface.
      */
     public interface OnRefreshListener {
-        public void onRefresh(int direction);
+        void onRefresh(int direction);
     }
 
     public int getDirection() {
