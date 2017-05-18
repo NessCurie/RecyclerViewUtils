@@ -55,7 +55,7 @@ public SimpleAdapter(final Context context, final int id, List<T> list)
 </code></pre>
 
 ### 多类型item
-#### 1. 如果没有其他特殊需求可以直接new出BaseAdapter的对象.如果有其他需求可以继重写部分方法.
+#### 1. 如果没有其他特殊需求可以直接new出BaseAdapter的对象.如果有其他需求可以继承重写部分方法.
 <pre><code>可以重写其中的<code>onViewHolderCreated()</code>方法在创建完ViewHolder后做一些操作;
 可以重写其中的<code>isClickEnabled()</code>设置哪些type不可点击.
 </code></pre>
@@ -173,9 +173,9 @@ public void onItemClick(View view, RecyclerView.ViewHolder holder, int position)
 </code></pre>
 
 ### 如果要添加下拉刷新或上拉加载更多
-在布局文件中使用<code>org.nesscurie.recyclerviewutils.SwipyRefreshLayout</code>节点包裹RecyclerView,在xml中设置对应的<code>refresh_mode</code>或在代码中使用<code>setRefreshMode(int)</code>设置.
+在布局文件中使用<code>com.github.recyclerviewutils.SwipyRefreshLayout</code>节点包裹RecyclerView,在xml中设置对应的<code>refresh_mode</code>或在代码中使用<code>setRefreshMode(int)</code>设置.
 
-<pre><code>&lt;org.nesscurie.recyclerviewutils.SwipyRefreshLayout
+<pre><code>&lt;com.github.recyclerviewutils.SwipyRefreshLayout
     android:id="@+id/swipyrefreshlayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -188,7 +188,7 @@ public void onItemClick(View view, RecyclerView.ViewHolder holder, int position)
 
     &lt;/android.support.v7.widget.RecyclerView>
 
-&lt;/org.nesscurie.recyclerviewutils.SwipyRefreshLayout>
+&lt;/com.github.recyclerviewutils.SwipyRefreshLayout>
 </code></pre>
 
 可以使用setColorSchemeResources()设置刷新控件中间的进度条的颜色,支持多个颜色,会依次出现
