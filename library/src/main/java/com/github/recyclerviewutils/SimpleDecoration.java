@@ -35,7 +35,7 @@ public class SimpleDecoration extends RecyclerView.ItemDecoration {
     /**
      * 使用指定Drawable作为recyclerView的分割线
      */
-    public SimpleDecoration(Context context, Drawable drawable) {
+    public SimpleDecoration(Drawable drawable) {
         this.drawable = drawable;
     }
 
@@ -44,7 +44,6 @@ public class SimpleDecoration extends RecyclerView.ItemDecoration {
      */
     public SimpleDecoration(Context context, int drawID) {
         drawable = context.getResources().getDrawable(drawID);
-
     }
 
     @Override
