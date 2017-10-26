@@ -157,8 +157,8 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
     /**
      * 在集合添加指定type和type的实现,当指定type已存在时不会添加
      *
-     * @param type 指定的type
-     * @param iType  item的type实现  {@link IType}
+     * @param type  指定的type
+     * @param iType item的type实现  {@link IType}
      */
     public void addType(int type, IType<T> iType) {
         if (types.get(type) == null) {

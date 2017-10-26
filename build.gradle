@@ -10,14 +10,17 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-
 allprojects {
     repositories {
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven { url 'https://dl.google.com/dl/android/maven2/' }
     }
 }
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
+ext {
+    compileSdkVersion = 26
+    buildToolsVersion = '26.0.2'
+    minSdkVersion = 19
+    targetSdkVersion = 26
+    supportVersion = '26.1.0'
 }
