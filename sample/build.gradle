@@ -20,7 +20,7 @@ android {
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:appcompat-v7:${supportVersion}"
+    compile "com.android.support:appcompat-v7:$supportVersion"
     compile project(':library')
     //compile 'com.github.NessCurie:RecyclerViewUtils:b25afa4'
 }
