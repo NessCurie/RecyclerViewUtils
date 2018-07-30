@@ -1,8 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group='com.github.nesscurie'
-version = "1.1.0.0"
+group = 'com.github.nesscurie'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -10,10 +9,25 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName version
+        versionName "1.1.0.0"
     }
 }
 dependencies {
     fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    api "com.android.support:recyclerview-v7:$supportVersion"
+}
+
+// 指定编码
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+// 打包源码
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
 }

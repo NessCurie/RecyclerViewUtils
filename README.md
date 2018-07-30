@@ -1,6 +1,6 @@
 ## RecyclerViewUtils
-1. 支持快速完成单类型item的RecyclerView;
-2. 便利完成多type类型item的RecyclerView;
+1. 快速完成单类型item的Adapter;
+2. 便利完成多type类型item的Adapter;
 3. RecyclerView分割线的实现,支持GridLayoutManager的横竖都显示;
 4. 使用Google官方ItemTouchHelper完成侧拉删除和条目拖动和指定控件触发拖动;
 5. 封装item的长按和点击事件;
@@ -23,11 +23,11 @@ Then, add the library to your module build.gradle
 }
 </code></pre>
 
-such as release is 0ea0597031
+such as release is v1.0
 
 you can use:
 <pre><code>dependencies {
-    compile 'com.github.NessCurie:RecyclerViewUtils:0ea0597031'
+    compile 'com.github.NessCurie:RecyclerViewUtils:v1.0'
 }
 </code></pre>
 

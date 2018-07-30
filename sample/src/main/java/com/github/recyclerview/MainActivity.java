@@ -12,8 +12,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView tvSingle = (TextView) findViewById(R.id.tv_single);
-        TextView tvMultiple = (TextView) findViewById(R.id.tv_multiple);
+        TextView tvSingle = findViewById(R.id.tv_single);
+        TextView tvMultiple = findViewById(R.id.tv_multiple);
 
         tvSingle.setOnClickListener(this);
         tvMultiple.setOnClickListener(this);
