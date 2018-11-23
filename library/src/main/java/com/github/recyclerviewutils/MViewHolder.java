@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.util.Linkify;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class MViewHolder extends RecyclerView.ViewHolder {
     }
 
     public static MViewHolder createHolder(Context context, int layoutId, ViewGroup parent, ItemTouchHelper helper) {
-        return new MViewHolder(context, View.inflate(context, layoutId, parent), helper);
+        return new MViewHolder(context, LayoutInflater.from(context).inflate(layoutId, parent, false), helper);
     }
 
     /**
