@@ -58,7 +58,7 @@ public class MultipleActivity extends AppCompatActivity implements
         }
 
         //获取下拉刷新和上拉刷新的控件并设置各种颜色
-        swipyrefreshlayout = (SwipyRefreshLayout) findViewById(R.id.swipyrefreshlayout);
+        swipyrefreshlayout = findViewById(R.id.swipyrefreshlayout);
         // 设置是下拉刷新还是上拉加载更多还是都有,也可以在属性中设置,此处已在属性中设置
         //swipyrefreshlayout.setRefreshMode(SwipyRefreshLayout.BOTH);
         swipyrefreshlayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -68,7 +68,7 @@ public class MultipleActivity extends AppCompatActivity implements
         swipyrefreshlayout.setOnRefreshListener(this);
 
         //获取recyclerView,设置各种属性e
-        recyclerview = (RecyclerView) findViewById(R.id.recyclerview);
+        recyclerview = findViewById(R.id.recyclerview);
         recyclerview.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 //如果是GridLayout在布局文件修改一下宽的设置
@@ -84,7 +84,6 @@ public class MultipleActivity extends AppCompatActivity implements
             }
         };
         adapter.addType(new IType<String>() {
-            @NonNull
             @Override
             public int getLayoutId() {
                 return R.layout.item_type1;
@@ -107,7 +106,6 @@ public class MultipleActivity extends AppCompatActivity implements
             }
         });
         adapter.addType(new IType<String>() {
-            @NonNull
             @Override
             public int getLayoutId() {
                 return R.layout.item_type2;
@@ -169,18 +167,6 @@ public class MultipleActivity extends AppCompatActivity implements
         }
     }
 
-
-    @Override
-    public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-        showToast("onItemLongClick" + position);
-        return false;
-    }
-
-    @Override
-    public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-        showToast("onItemClick" + position);
-    }
-
     private Toast toast;
 
     private void showToast(String s) {
@@ -189,5 +175,17 @@ public class MultipleActivity extends AppCompatActivity implements
         }
         toast.setText(s);
         toast.show();
+    }
+
+    @Override
+    public void onItemClick(View view, MViewHolder holder, int position) {
+        showToast("onItemClick" + position);
+
+    }
+
+    @Override
+    public boolean onItemLongClick(View view, MViewHolder holder, int position) {
+        showToast("onItemLongClick" + position);
+        return false;
     }
 }

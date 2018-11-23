@@ -109,17 +109,6 @@ public class SimpleActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-        showToast("onItemLongClick" + position);
-        return false;
-    }
-
-    @Override
-    public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-        showToast("onItemClick" + position);
-    }
-
     private Toast toast;
 
     private void showToast(String s) {
@@ -128,5 +117,16 @@ public class SimpleActivity extends AppCompatActivity implements
         }
         toast.setText(s);
         toast.show();
+    }
+
+    @Override
+    public void onItemClick(View view, MViewHolder holder, int position) {
+        showToast("onItemClick" + position);
+    }
+
+    @Override
+    public boolean onItemLongClick(View view, MViewHolder holder, int position) {
+        showToast("onItemLongClick" + position);
+        return false;
     }
 }
