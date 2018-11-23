@@ -1,6 +1,7 @@
 package com.github.recyclerviewutils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public abstract class SimpleAdapter<T> extends BaseAdapter<T> {
     public SimpleAdapter(final Context context, final int id, List<T> list) {
         super(context, list);
         addType(new IType<T>() {
+            @NonNull
             @Override
             public int getLayoutId() {
                 return id;

@@ -1,6 +1,7 @@
 package com.github.recyclerviewutils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -69,9 +70,10 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
     /**
      * 创建viewHolder对象,会使用{@link IType#getLayoutId()}返回的Layout创建
      */
+    @NonNull
     @Override
-    public MViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MViewHolder holder = MViewHolder.createHolder(context, types.get(viewType).getLayoutId(), helper);
+    public MViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        MViewHolder holder = MViewHolder.createHolder(context, types.get(viewType).getLayoutId(), parent, helper);
         onViewHolderCreated(holder);
         return holder;
     }
@@ -82,7 +84,7 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
      * 使用{@link IType}中的{@link IType#setData(MViewHolder, Object, int)}为item设置数据
      */
     @Override
-    public void onBindViewHolder(MViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MViewHolder holder, int position) {
         T t = list.get(position);
         for (int i = 0; i < types.size(); i++) {
             IType<T> type = types.valueAt(i);
@@ -174,11 +176,11 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, RecyclerView.ViewHolder holder, int position);
+        void onItemClick(View view, MViewHolder holder, int position);
     }
 
     public interface OnItemLongClickListener {
-        boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position);
+        boolean onItemLongClick(View view, MViewHolder holder, int position);
     }
 
     /**

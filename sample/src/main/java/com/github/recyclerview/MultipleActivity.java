@@ -2,6 +2,7 @@ package com.github.recyclerview;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -83,6 +84,7 @@ public class MultipleActivity extends AppCompatActivity implements
             }
         };
         adapter.addType(new IType<String>() {
+            @NonNull
             @Override
             public int getLayoutId() {
                 return R.layout.item_type1;
@@ -105,6 +107,7 @@ public class MultipleActivity extends AppCompatActivity implements
             }
         });
         adapter.addType(new IType<String>() {
+            @NonNull
             @Override
             public int getLayoutId() {
                 return R.layout.item_type2;

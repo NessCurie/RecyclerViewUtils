@@ -12,6 +12,7 @@ import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -43,8 +44,8 @@ public class MViewHolder extends RecyclerView.ViewHolder {
         views = new SparseArray<>();
     }
 
-    public static MViewHolder createHolder(Context context, int layoutId, ItemTouchHelper helper) {
-        return new MViewHolder(context, View.inflate(context, layoutId, null), helper);
+    public static MViewHolder createHolder(Context context, int layoutId, ViewGroup parent, ItemTouchHelper helper) {
+        return new MViewHolder(context, View.inflate(context, layoutId, parent), helper);
     }
 
     /**
@@ -57,8 +58,8 @@ public class MViewHolder extends RecyclerView.ViewHolder {
     /**
      * 通过viewId获取控件
      */
-    public View getView(int id) {
-        View view = views.get(id);
+    public <T extends View> T getView(int id) {
+        T view = (T) views.get(id);
         if (view == null) {
             view = itemView.findViewById(id);
             views.put(id, view);
@@ -91,31 +92,31 @@ public class MViewHolder extends RecyclerView.ViewHolder {
     }
 
     public MViewHolder setText(int viewId, String text) {
-        TextView tv = (TextView) getView(viewId);
+        TextView tv = getView(viewId);
         if (tv != null) tv.setText(text);
         return this;
     }
 
     public MViewHolder setImageResource(int viewId, int resId) {
-        ImageView iv = (ImageView) getView(viewId);
+        ImageView iv = getView(viewId);
         if (iv != null) iv.setImageResource(resId);
         return this;
     }
 
     public MViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
-        ImageView iv = (ImageView) getView(viewId);
+        ImageView iv = getView(viewId);
         if (iv != null) iv.setImageBitmap(bitmap);
         return this;
     }
 
     public MViewHolder setImageDrawable(int viewId, Drawable drawable) {
-        ImageView iv = (ImageView) getView(viewId);
+        ImageView iv = getView(viewId);
         if (iv != null) iv.setImageDrawable(drawable);
         return this;
     }
 
     public MViewHolder setBackgroundColor(int viewId, int color) {
-        ImageView iv = (ImageView) getView(viewId);
+        View iv = getView(viewId);
         if (iv != null) iv.setBackgroundColor(color);
         return this;
     }
@@ -127,19 +128,19 @@ public class MViewHolder extends RecyclerView.ViewHolder {
     }
 
     public MViewHolder setTextColor(int viewId, int textColor) {
-        TextView tv = (TextView) getView(viewId);
+        TextView tv = getView(viewId);
         if (tv != null) tv.setTextColor(textColor);
         return this;
     }
 
     public MViewHolder setTextColorRes(int viewId, int textColorRes) {
-        TextView tv = (TextView) getView(viewId);
+        TextView tv = getView(viewId);
         if (tv != null) tv.setTextColor(context.getResources().getColor(textColorRes));
         return this;
     }
 
     public MViewHolder linkify(int viewId) {
-        TextView tv = (TextView) getView(viewId);
+        TextView tv = getView(viewId);
         if (tv != null) Linkify.addLinks(tv, Linkify.ALL);
         return this;
     }
@@ -158,7 +159,7 @@ public class MViewHolder extends RecyclerView.ViewHolder {
 
     public MViewHolder setTypeface(Typeface typeface, int... viewIds) {
         for (int viewId : viewIds) {
-            TextView view = (TextView) getView(viewId);
+            TextView view = getView(viewId);
             if (view != null) {
                 view.setTypeface(typeface);
                 view.setPaintFlags(view.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
@@ -168,13 +169,13 @@ public class MViewHolder extends RecyclerView.ViewHolder {
     }
 
     public MViewHolder setProgress(int viewId, int progress) {
-        ProgressBar pb = (ProgressBar) getView(viewId);
+        ProgressBar pb = getView(viewId);
         if (pb != null) pb.setProgress(progress);
         return this;
     }
 
     public MViewHolder setProgress(int viewId, int progress, int max) {
-        ProgressBar pb = (ProgressBar) getView(viewId);
+        ProgressBar pb = getView(viewId);
         if (pb != null) {
             pb.setMax(max);
             pb.setProgress(progress);
@@ -183,19 +184,19 @@ public class MViewHolder extends RecyclerView.ViewHolder {
     }
 
     public MViewHolder setMax(int viewId, int max) {
-        ProgressBar pb = (ProgressBar) getView(viewId);
+        ProgressBar pb = getView(viewId);
         if (pb != null) pb.setMax(max);
         return this;
     }
 
     public MViewHolder setRating(int viewId, float rating) {
-        RatingBar rb = (RatingBar) getView(viewId);
+        RatingBar rb = getView(viewId);
         if (rb != null) rb.setRating(rating);
         return this;
     }
 
     public MViewHolder setRating(int viewId, float rating, int max) {
-        RatingBar rb = (RatingBar) getView(viewId);
+        RatingBar rb = getView(viewId);
         if (rb != null) {
             rb.setMax(max);
             rb.setRating(rating);
@@ -216,7 +217,7 @@ public class MViewHolder extends RecyclerView.ViewHolder {
     }
 
     public MViewHolder setChecked(int viewId, boolean checked) {
-        Checkable view = (Checkable) getView(viewId);
+        Checkable view = getView(viewId);
         if (view != null) view.setChecked(checked);
         return this;
     }
