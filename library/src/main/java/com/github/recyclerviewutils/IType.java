@@ -1,5 +1,7 @@
 package com.github.recyclerviewutils;
 
+import android.support.annotation.NonNull;
+
 /**
  * 代表多type类型,实现此接口并添加适配器中
  *
@@ -21,7 +23,7 @@ public interface IType<T> {
      * @param position item的索引
      * @return 是否是该类型的item
      */
-    boolean isThisTypeItem(T item, int position);
+    boolean isThisTypeItem(@NonNull T item, int position);
 
     /**
      * 为item设置数据的方式
@@ -31,5 +33,5 @@ public interface IType<T> {
      * @param t        传入适配器集合中对应索引的model对象
      * @param position item的索引
      */
-    void setData(MViewHolder holder, T t, int position);
+    void setData(@NonNull MViewHolder holder, @NonNull T t, int position);
 }

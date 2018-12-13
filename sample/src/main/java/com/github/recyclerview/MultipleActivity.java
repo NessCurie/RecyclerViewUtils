@@ -90,7 +90,7 @@ public class MultipleActivity extends AppCompatActivity implements
             }
 
             @Override
-            public boolean isThisTypeItem(String item, int position) {//不是数字的使用该type,是灰色背景
+            public boolean isThisTypeItem(@NonNull String item, int position) {//不是数字的使用该type,是灰色背景
                 try {
                     Integer.parseInt(item);
                     return false;
@@ -100,7 +100,7 @@ public class MultipleActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void setData(MViewHolder holder, String s, int position) {
+            public void setData(@NonNull MViewHolder holder, @NonNull String s, int position) {
                 holder.setText(R.id.tv_center, s)
                         .setDragListener(R.id.iv_hand);
             }
@@ -112,7 +112,7 @@ public class MultipleActivity extends AppCompatActivity implements
             }
 
             @Override
-            public boolean isThisTypeItem(String item, int position) {  //是数字的使用该type,是红色背景
+            public boolean isThisTypeItem(@NonNull String item, int position) {  //是数字的使用该type,是红色背景
                 try {
                     Integer.parseInt(item);
                     return true;
@@ -122,7 +122,7 @@ public class MultipleActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void setData(MViewHolder holder, String s, int position) {
+            public void setData(@NonNull MViewHolder holder, @NonNull String s, int position) {
                 holder.setText(R.id.tv_center, s);
             }
         });

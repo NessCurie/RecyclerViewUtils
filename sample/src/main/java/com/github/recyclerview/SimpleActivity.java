@@ -2,6 +2,7 @@ package com.github.recyclerview;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,7 +63,7 @@ public class SimpleActivity extends AppCompatActivity implements
         //将指定控件设置为触发拖动
         simpleAdapter = new SimpleAdapter<String>(this, R.layout.item_simple, list) {
             @Override
-            public void setItemData(final MViewHolder holder, String s, int position) {
+            public void setItemData(@NonNull final MViewHolder holder, @NonNull String s, int position) {
                 holder.setText(R.id.tv_center, s)
                         .setDragListener(R.id.iv_hand);           //将指定控件设置为触发拖动
             }

@@ -12,7 +12,6 @@ import java.util.List;
  */
 public abstract class SimpleAdapter<T> extends BaseAdapter<T> {
 
-
     /**
      * 创建简单的recyclerView适配器
      *
@@ -23,19 +22,18 @@ public abstract class SimpleAdapter<T> extends BaseAdapter<T> {
     public SimpleAdapter(final Context context, final int id, List<T> list) {
         super(context, list);
         addType(new IType<T>() {
-            @NonNull
             @Override
             public int getLayoutId() {
                 return id;
             }
 
             @Override
-            public boolean isThisTypeItem(T item, int position) {
+            public boolean isThisTypeItem(@NonNull T item, int position) {
                 return true;
             }
 
             @Override
-            public void setData(MViewHolder holder, T t, int position) {
+            public void setData(@NonNull MViewHolder holder, @NonNull T t, int position) {
                 setItemData(holder, t, position);
             }
         });
@@ -49,6 +47,6 @@ public abstract class SimpleAdapter<T> extends BaseAdapter<T> {
      * @param t        传入适配器集合中对应索引的model对象
      * @param position item的索引
      */
-    public abstract void setItemData(MViewHolder holder, T t, int position);
+    public abstract void setItemData(@NonNull MViewHolder holder, @NonNull T t, int position);
 
 }

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.util.Linkify;
@@ -79,8 +78,7 @@ public class MViewHolder extends RecyclerView.ViewHolder {
             view.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (MotionEventCompat.getActionMasked(event) ==
-                            MotionEvent.ACTION_DOWN) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         if (helper != null) {
                             helper.startDrag(MViewHolder.this);
                         }
@@ -95,6 +93,12 @@ public class MViewHolder extends RecyclerView.ViewHolder {
     public MViewHolder setText(int viewId, String text) {
         TextView tv = getView(viewId);
         if (tv != null) tv.setText(text);
+        return this;
+    }
+
+    public MViewHolder setText(int viewId, int resid) {
+        TextView tv = getView(viewId);
+        if (tv != null) tv.setText(resid);
         return this;
     }
 
@@ -113,6 +117,12 @@ public class MViewHolder extends RecyclerView.ViewHolder {
     public MViewHolder setImageDrawable(int viewId, Drawable drawable) {
         ImageView iv = getView(viewId);
         if (iv != null) iv.setImageDrawable(drawable);
+        return this;
+    }
+
+    public MViewHolder setBackground(int viewId, Drawable drawable) {
+        View iv = getView(viewId);
+        if (iv != null) iv.setBackground(drawable);
         return this;
     }
 
