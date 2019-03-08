@@ -122,7 +122,7 @@ public class MViewHolder extends RecyclerView.ViewHolder {
 
     public MViewHolder setBackground(int viewId, Drawable drawable) {
         View iv = getView(viewId);
-        if (iv != null) iv.setBackground(drawable);
+        if (iv != null) iv.setBackgroundDrawable(drawable);
         return this;
     }
 
