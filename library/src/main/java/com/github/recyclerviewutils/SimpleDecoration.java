@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -47,7 +48,7 @@ public class SimpleDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+    public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             orientation = ((GridLayoutManager) layoutManager).getOrientation();
@@ -56,8 +57,10 @@ public class SimpleDecoration extends RecyclerView.ItemDecoration {
         } else {
             orientation = ((LinearLayoutManager) layoutManager).getOrientation();
         }
-        drawVertical(c, parent);
-        drawHorizontal(c, parent);
+        if (drawable != null) {
+            drawVertical(c, parent);
+            drawHorizontal(c, parent);
+        }
     }
 
     /**

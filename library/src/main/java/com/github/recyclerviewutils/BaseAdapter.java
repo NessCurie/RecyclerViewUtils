@@ -24,9 +24,10 @@ import java.util.List;
  * 开启条目从侧拉删除和长按拖动,如果设置了长按拖动长按点击事件不会失效,会和长按拖动事件同时触发
  * 如果不需要长按拖动事件,
  * 可以在 {@link #openItemTouch(RecyclerView, boolean, boolean, SwipyRefreshLayout)}第二个参数传为false
- * 如果需要设置item中某个元素为触发拖动的元素,在{@link IType#setData(MViewHolder, Object, int)}中使用holder
+ * 如果需要设置item中某个元素为触发拖动的元素,在{@link IType#setData(MViewHolder, T, int)}中使用holder
  * 中的{@link MViewHolder#setDragListener(int)} 设置
  */
+@SuppressWarnings("unused")
 public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements ItemTouchDataCallBack {
 
     private Context context;
@@ -80,8 +81,8 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
 
     /**
      * 绑定数据
-     * 会根据{@link IType}中的 {@link IType#isThisTypeItem(Object, int)}判断是否是对应的item
-     * 使用{@link IType}中的{@link IType#setData(MViewHolder, Object, int)}为item设置数据
+     * 会根据{@link IType}中的 {@link IType#isThisTypeItem(T, int)}判断是否是对应的item
+     * 使用{@link IType}中的{@link IType#setData(MViewHolder, T, int)}为item设置数据
      */
     @Override
     public void onBindViewHolder(@NonNull MViewHolder holder, int position) {

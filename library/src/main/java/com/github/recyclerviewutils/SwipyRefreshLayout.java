@@ -9,7 +9,6 @@ import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -43,6 +42,7 @@ import com.github.recyclerviewutils.widget.MaterialProgressDrawable;
  * refresh of the content wherever this gesture is used.
  * </p>
  */
+@SuppressWarnings("unused")
 public class SwipyRefreshLayout extends ViewGroup {
 
     public static final int TOP = 0;
@@ -165,6 +165,7 @@ public class SwipyRefreshLayout extends ViewGroup {
         }
     };
 
+    @SuppressWarnings("SameParameterValue")
     private void setColorViewAlpha(int targetAlpha) {
         mCircleView.getBackground().setAlpha(targetAlpha);
         mProgress.setAlpha(targetAlpha);
@@ -969,7 +970,6 @@ public class SwipyRefreshLayout extends ViewGroup {
     }
 
     private void setTargetOffsetTopAndBottom(int offset) {
-        Log.e("wtf", "offset = " + offset);
         mCircleView.bringToFront();
         mCircleView.offsetTopAndBottom(offset);
         mCurrentTargetOffsetTop = mCircleView.getTop();

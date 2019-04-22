@@ -1,6 +1,7 @@
 package com.github.recyclerviewutils;
 
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -53,7 +54,7 @@ public class SimpleItemTouchCallBack extends ItemTouchHelper.Callback {
      * makeMovementFlags(int, int)来构造返回的flag
      */
     @Override
-    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager
                 || layoutManager instanceof StaggeredGridLayoutManager) {
@@ -90,8 +91,8 @@ public class SimpleItemTouchCallBack extends ItemTouchHelper.Callback {
      * 当在移动
      */
     @Override
-    public boolean onMove(RecyclerView recyclerView,
-                          RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+    public boolean onMove(@NonNull RecyclerView recyclerView,
+                          @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
         adapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
@@ -100,7 +101,7 @@ public class SimpleItemTouchCallBack extends ItemTouchHelper.Callback {
      * 当侧拉时
      */
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         adapter.onItemDismiss(viewHolder.getAdapterPosition());
     }
 
@@ -122,8 +123,8 @@ public class SimpleItemTouchCallBack extends ItemTouchHelper.Callback {
      * 拖动或侧拉完成
      */
     @Override
-    public void clearView(RecyclerView recyclerView,
-                          RecyclerView.ViewHolder viewHolder) {
+    public void clearView(@NonNull RecyclerView recyclerView,
+                          @NonNull RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
         if (swipyrefreshlayout != null) {
             swipyrefreshlayout.dragEnd();
@@ -135,7 +136,7 @@ public class SimpleItemTouchCallBack extends ItemTouchHelper.Callback {
      * 当所有动画都设置了的情况下不需要加super,否则需要加上,不然会有一些动作没有动画效果
      */
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
                             float dX, float dY, int actionState, boolean isCurrentlyActive) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             float width = (float) viewHolder.itemView.getWidth();

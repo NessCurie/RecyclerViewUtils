@@ -22,6 +22,7 @@ import android.widget.TextView;
 /**
  * ViewHolder,都已经封装在{@link BaseAdapter} 中,不需要再实现,提供获取对应控件和根据id设置数据的方式
  */
+@SuppressWarnings("unused")
 public class MViewHolder extends RecyclerView.ViewHolder {
 
     private Context context;
