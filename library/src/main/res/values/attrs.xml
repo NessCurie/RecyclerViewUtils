@@ -8,5 +8,16 @@
             <enum name="both" value="2" />
         </attr>
     </declare-styleable>
-    
+
+    <declare-styleable name="HFRefreshLayout">
+        <attr name="footerNestLayout" format="reference" />
+        <attr name="headerNestLayout" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="QuickSideBarView">
+        <attr name="sidebarTextColor" format="color|reference" />
+        <attr name="sidebarChooseTextColor" format="color|reference" />
+        <attr name="sidebarTextSize" format="dimension" />
+        <attr name="sidebarChooseTextSize" format="dimension" />
+    </declare-styleable>
 </resources>

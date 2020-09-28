@@ -22,4 +22,13 @@
         android:gravity="center"
         android:text="多种条目的使用" />
 
+    <TextView
+        android:id="@+id/tv_hfrefresh_quicksidebar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray"
+        android:gravity="center"
+        android:text="头尾布局的下拉刷新和跳转条" />
+
 </LinearLayout>

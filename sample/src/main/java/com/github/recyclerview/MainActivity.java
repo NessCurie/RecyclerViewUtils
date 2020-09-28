@@ -14,9 +14,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         TextView tvSingle = findViewById(R.id.tv_single);
         TextView tvMultiple = findViewById(R.id.tv_multiple);
+        TextView tvHfrefreshQuicksidebar = findViewById(R.id.tv_hfrefresh_quicksidebar);
 
         tvSingle.setOnClickListener(this);
         tvMultiple.setOnClickListener(this);
+        tvHfrefreshQuicksidebar.setOnClickListener(this);
     }
 
     @Override
@@ -25,12 +27,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.tv_single:
                 intent.setClass(this, SimpleActivity.class);
-                startActivity(intent);
                 break;
             case R.id.tv_multiple:
                 intent.setClass(this, MultipleActivity.class);
-                startActivity(intent);
+                break;
+            case R.id.tv_hfrefresh_quicksidebar:
+                intent.setClass(this, HfrefreshQuicksidebarActivity.class);
                 break;
         }
+        startActivity(intent);
     }
 }

@@ -76,7 +76,7 @@ public class SimpleDecoration extends RecyclerView.ItemDecoration {
             View child = parent.getChildAt(i);
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
             int left = child.getLeft() - params.leftMargin;
-            int right = child.getRight() + params.rightMargin + drawable.getIntrinsicWidth();
+            int right = child.getRight() + params.rightMargin;
             int top = child.getBottom() + params.bottomMargin;
             int bottom = top + drawable.getIntrinsicHeight();
             drawable.setBounds(left, top, right, bottom);
