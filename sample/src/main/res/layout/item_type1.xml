@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="54dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="2dp"
@@ -14,7 +14,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:gravity="center"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp" />
@@ -23,10 +23,9 @@
             android:id="@+id/iv_hand"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="center_vertical"
             android:scaleType="center"
             android:src="@drawable/ic_reorder_cyan_600_24dp" />
-
     </RelativeLayout>
 </FrameLayout>

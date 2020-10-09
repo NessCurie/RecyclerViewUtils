@@ -41,7 +41,7 @@ public class SimpleActivity extends AppCompatActivity implements
         }
 
         //获取下拉刷新和上拉刷新的控件并设置各种颜色
-        swipyrefreshlayout = findViewById(R.id.swipyrefreshlayout);
+        swipyrefreshlayout = findViewById(R.id.swipyRefreshLayout);
         // 设置是下拉刷新还是上拉加载更多还是都有,也可以在属性中设置,此处已在属性中设置
         //swipyrefreshlayout.setRefreshMode(SwipyRefreshLayout.BOTH);
         swipyrefreshlayout.setColorSchemeResources(android.R.color.holo_blue_bright,

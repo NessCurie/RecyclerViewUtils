@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.github.recyclerviewutils.SwipyRefreshLayout
-        android:id="@+id/swipyrefreshlayout"
+        android:id="@+id/swipyRefreshLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:refresh_mode="both">
@@ -13,9 +13,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
 
-        </android.support.v7.widget.RecyclerView>
 
     </com.github.recyclerviewutils.SwipyRefreshLayout>
 </RelativeLayout>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RecyclerViewUtilsSample</string>
-    <string name="pull_to_sync">下拉同步</string>
-    <string name="ready_to_sync">释放同步</string>
-    <string name="syncing">正在同步</string>
-    <string name="sync_success">同步完成</string>
+    <string name="pull_to_sync">下拉刷新</string>
+    <string name="ready_to_sync">释放刷新</string>
+    <string name="syncing">正在刷新</string>
+    <string name="sync_success">刷新完成</string>
 </resources>

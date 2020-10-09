@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.setClass(this, MultipleActivity.class);
                 break;
             case R.id.tv_hfrefresh_quicksidebar:
-                intent.setClass(this, HfrefreshQuicksidebarActivity.class);
+                intent.setClass(this, HfRefreshQuickSidebarActivity.class);
                 break;
         }
         startActivity(intent);

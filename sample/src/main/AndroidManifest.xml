@@ -16,7 +16,7 @@
         </activity>
         <activity android:name="com.github.recyclerview.SimpleActivity" />
         <activity android:name="com.github.recyclerview.MultipleActivity" />
-        <activity android:name="com.github.recyclerview.HfrefreshQuicksidebarActivity" />
+        <activity android:name="com.github.recyclerview.HfRefreshQuickSidebarActivity" />
     </application>
 
 </manifest>

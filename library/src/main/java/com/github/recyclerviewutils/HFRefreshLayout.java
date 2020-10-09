@@ -296,7 +296,7 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
     /**
      * @param headerView 下拉刷新的
      */
-    protected void setHeaderView(View headerView) {
+    public void setHeaderView(View headerView) {
         if (headerView instanceof LoaderDecor) {
             this.headerView = headerView;
             addView(headerView);
@@ -308,7 +308,7 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
      *
      * @param footerView 加载更多
      */
-    protected void setFooterView(View footerView) {
+    public void setFooterView(View footerView) {
         if (footerView instanceof LoaderDecor) {
             this.footerView = footerView;
             addView(footerView);
