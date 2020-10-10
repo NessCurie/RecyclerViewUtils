@@ -116,21 +116,25 @@ public class DefaultHeaderView extends RelativeLayout implements HFRefreshLayout
     @Override
     public void setStateNormalHint(String s) {
         stateNormalHint = s;
+        if (state == STATE_NORMAL) tvHint.setText(stateNormalHint);
     }
 
     @Override
     public void setStateReadyHint(String s) {
         stateReadyHint = s;
+        if (state == STATE_READY) tvHint.setText(stateReadyHint);
     }
 
     @Override
     public void setStateRefreshingHint(String s) {
         stateRefreshingHint = s;
+        if (state == STATE_REFRESHING) tvHint.setText(stateRefreshingHint);
     }
 
     @Override
     public void setStateSuccessHint(String s) {
         stateSuccessHint = s;
+        if (state == STATE_SUCCESS) tvHint.setText(stateSuccessHint);
     }
 
     @Override

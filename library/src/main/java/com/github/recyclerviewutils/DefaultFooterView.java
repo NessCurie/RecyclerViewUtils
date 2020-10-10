@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 public class DefaultFooterView extends RelativeLayout implements HFRefreshLayout.LoaderDecor {
 
-    private int status = STATE_NORMAL;
+    private int state = STATE_NORMAL;
     private View progressBar;
     private TextView tvHint;
 
@@ -49,8 +49,7 @@ public class DefaultFooterView extends RelativeLayout implements HFRefreshLayout
 
     @Override
     public void onStateChange(int state) {
-        if (state == status) return;
-        status = state;
+        if (state == this.state) return;
         if (state == STATE_READY) {
             progressBar.setVisibility(View.INVISIBLE);
             tvHint.setVisibility(View.VISIBLE);
@@ -74,30 +73,36 @@ public class DefaultFooterView extends RelativeLayout implements HFRefreshLayout
         } else {
             tvHint.setVisibility(View.GONE);
         }
+        this.state = state;
     }
 
     @Override
     public void setStateNormalHint(String s) {
         stateNormalHint = s;
+        if (state == STATE_NORMAL) tvHint.setText(stateNormalHint);
     }
 
     @Override
     public void setStateReadyHint(String s) {
         stateReadyHint = s;
+        if (state == STATE_READY) tvHint.setText(stateReadyHint);
     }
 
     @Override
     public void setStateRefreshingHint(String s) {
         stateRefreshingHint = s;
+        if (state == STATE_REFRESHING) tvHint.setText(stateRefreshingHint);
     }
 
     @Override
     public void setStateSuccessHint(String s) {
         stateSuccessHint = s;
+        if (state == STATE_SUCCESS) tvHint.setText(stateSuccessHint);
     }
 
     @Override
     public void setStateHasLoadAll(String s) {
         stateHasLoadAllHint = s;
+        if (state == STATE_HAS_LOAD_ALL) tvHint.setText(stateHasLoadAllHint);
     }
 }
