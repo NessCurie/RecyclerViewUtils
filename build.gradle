@@ -26,7 +26,7 @@ ext {
     targetSdkVersion = 28
     compileSdkVersion = 28
     supportVersion = '28.0.0'
-    recyclerViewUtilsVersion = '4.1'
+    recyclerViewUtilsVersion = '4.1x'
 }
 task clean(type: Delete) {
     delete rootProject.buildDir
