@@ -3,11 +3,11 @@ package com.github.recyclerview
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.recyclerviewutils.MViewHolder
 import com.github.recyclerviewutils.SimpleAdapter
 import com.github.recyclerviewutils.SimpleDecoration
@@ -96,7 +96,6 @@ class HfRefreshQuickSidebarActivity : AppCompatActivity() {
         if (this.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
             actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, this.resources.displayMetrics)
         }
-
 
         quickSideBarView.setOnQuickSideBarTouchListener { needShowTips, letter, _, y ->
             flSideBarTips.visibility = if (needShowTips) View.VISIBLE else View.INVISIBLE

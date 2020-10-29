@@ -1,6 +1,7 @@
 package com.github.recyclerviewutils;
 
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * 代表多type类型,实现此接口并添加适配器中

@@ -44,8 +44,8 @@ public class DefaultHeaderView extends RelativeLayout implements HFRefreshLayout
 
     private void initView(Context context) {
         View.inflate(context, R.layout.view_header, this);
-        ivIcon = (ImageView) findViewById(R.id.iv_icon);
-        tvHint = (TextView) findViewById(R.id.tv_hint);
+        ivIcon = findViewById(R.id.iv_icon);
+        tvHint = findViewById(R.id.tv_hint);
 
         rotateUpAnim = new RotateAnimation(0.0f, -180.0f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);

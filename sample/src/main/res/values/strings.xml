@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RecyclerViewUtilsSample</string>
+    <string name="app_name">RecyclerViewUtilsXSample</string>
     <string name="pull_to_sync">下拉刷新</string>
     <string name="ready_to_sync">释放刷新</string>
     <string name="syncing">正在刷新</string>

@@ -31,7 +31,7 @@ public class DefaultFooterView extends RelativeLayout implements HFRefreshLayout
     private void initView(Context context) {
         View.inflate(getContext(), R.layout.view_footer, this);
         progressBar = findViewById(R.id.pb_footer_progress);
-        tvHint = (TextView) findViewById(R.id.tv_hint);
+        tvHint = findViewById(R.id.tv_hint);
         final float scale = context.getResources().getDisplayMetrics().density;
         int padding = (int) (10 / scale + 0.5f);
         setPadding(0, padding, 0, padding);
