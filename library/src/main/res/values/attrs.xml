@@ -17,7 +17,21 @@
     <declare-styleable name="QuickSideBarView">
         <attr name="sidebarTextColor" format="color|reference" />
         <attr name="sidebarChooseTextColor" format="color|reference" />
+        <attr name="sidebarHasTextColor" format="color|reference" />
         <attr name="sidebarTextSize" format="dimension" />
         <attr name="sidebarChooseTextSize" format="dimension" />
+        <attr name="sidebarHasTextSize" format="dimension" />
+        <attr name="sidebarTextGravity">
+            <flag name="center" value="0" />
+            <flag name="top" value="1" />
+            <flag name="bottom" value="2" />
+            <flag name="start" value="3" />
+            <flag name="end" value="4" />
+        </attr>
+        <attr name="sidebarOrientation">
+            <enum name="horizontal" value="0" />
+            <!-- Defines a vertical widget. -->
+            <enum name="vertical" value="1" />
+        </attr>
     </declare-styleable>
 </resources>
