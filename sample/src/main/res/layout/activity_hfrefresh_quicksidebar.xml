@@ -8,7 +8,8 @@
     <com.github.recyclerviewutils.HFRefreshLayout
         android:id="@+id/hfRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:orientation="horizontal">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvList"
@@ -19,14 +20,16 @@
 
     <com.github.recyclerviewutils.QuickSideBarView
         android:id="@+id/quickSideBarView"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
         android:visibility="gone"
         app:sidebarChooseTextColor="@color/colorPrimaryDark"
         app:sidebarChooseTextSize="20sp"
+        app:sidebarOrientation="horizontal"
         app:sidebarTextColor="@color/colorPrimary"
         app:sidebarTextSize="20sp" />
 

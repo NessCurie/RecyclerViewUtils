@@ -12,6 +12,12 @@
     <declare-styleable name="HFRefreshLayout">
         <attr name="footerNestLayout" format="reference" />
         <attr name="headerNestLayout" format="reference" />
+        <attr name="orientation">
+            <!-- Defines an horizontal widget. -->
+            <enum name="horizontal" value="0" />
+            <!-- Defines a vertical widget. -->
+            <enum name="vertical" value="1" />
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="QuickSideBarView">

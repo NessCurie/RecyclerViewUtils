@@ -48,7 +48,9 @@ class HfRefreshQuickSidebarActivity : AppCompatActivity() {
     }
 
     private val list = ArrayList<String>()
-    private val layoutManager: LinearLayoutManager by lazy { LinearLayoutManager(this) }
+    private val layoutManager: LinearLayoutManager by lazy {
+        LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+    }
     private val adapter: SimpleAdapter<String> by lazy {
         object : SimpleAdapter<String>(this, R.layout.item_quick_sidebar, list) {
             override fun setItemData(holder: MViewHolder, s: String, position: Int) {
@@ -63,7 +65,6 @@ class HfRefreshQuickSidebarActivity : AppCompatActivity() {
         val listEmptyView = View.inflate(this, R.layout.layout_list_empty, null)
         hfRefreshLayout.run {
             emptyView = listEmptyView
-            setRefreshOnStateNormalHint(context.getString(R.string.pull_to_sync))
             setRefreshOnStateReadyHint(context.getString(R.string.ready_to_sync))
             setRefreshOnStateRefreshingHint(context.getString(R.string.syncing))
             setRefreshOnStateSuccessHint(context.getString(R.string.sync_success))
@@ -76,7 +77,7 @@ class HfRefreshQuickSidebarActivity : AppCompatActivity() {
 
         hfRefreshLayout.setOnRefreshListener {
             handler.postDelayed({
-                showList(arrayListOf())
+                showList(arrayListOf("A", "D", "C", "C", "Z", "W", "C", "C"))
             }, 2000)
         }
         hfRefreshLayout.setOnLoadMoreListener {
@@ -84,6 +85,7 @@ class HfRefreshQuickSidebarActivity : AppCompatActivity() {
                 this.list.addAll(arrayListOf("朱", "秦", "尤", "许", "何", "吕", "施", "张", "孔",
                         "曹", "严", "华", "金", "魏", "陶", "姜"))
                 list.sortWith(comparator)
+                hfRefreshLayout.hideEmptyView()
                 if (hfRefreshLayout.isLoadingMore) {
                     hfRefreshLayout.onLoadMoreFinished(1000)
                 }
