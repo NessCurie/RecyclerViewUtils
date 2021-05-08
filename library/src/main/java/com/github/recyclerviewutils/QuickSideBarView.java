@@ -280,11 +280,11 @@ public class QuickSideBarView extends View {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                choose = -1;
+                invalidate();
                 if (listener != null) {
                     listener.onLetterStateChanged(false, letters.get(newChoose), choose, letterCenterRawMargin);
                 }
-                choose = -1;
-                invalidate();
                 break;
         }
 
