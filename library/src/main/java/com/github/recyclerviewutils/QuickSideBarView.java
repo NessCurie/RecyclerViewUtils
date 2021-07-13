@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +28,10 @@ public class QuickSideBarView extends View {
     public static final int BOTTOM = 2;
     public static final int START = 3;
     public static final int END = 4;
+
+    public static final int STYLE_NORMAL = 0;
+    public static final int STYLE_BOLD = 1;
+    public static final int STYLE_ITALIC = 2;
 
     public interface OnQuickSideBarTouchListener {
         /**
@@ -53,6 +58,9 @@ public class QuickSideBarView extends View {
     private float maxTextCenterY;
     private int orientation = VERTICAL;
     private int gravity = CENTER;
+    private int textStyle = STYLE_NORMAL;
+    private int textChooseStyle = STYLE_NORMAL;
+    private int textHasStyle = STYLE_NORMAL;
 
     public QuickSideBarView(Context context) {
         this(context, null);
@@ -82,6 +90,9 @@ public class QuickSideBarView extends View {
             textSizeHas = a.getDimension(R.styleable.QuickSideBarView_sidebarHasTextSize, textSizeHas);
             orientation = a.getInt(R.styleable.QuickSideBarView_sidebarOrientation, VERTICAL);
             gravity = a.getInt(R.styleable.QuickSideBarView_sidebarTextGravity, CENTER);
+            textStyle = a.getInt(R.styleable.QuickSideBarView_sidebarTextStyle, STYLE_NORMAL);
+            textChooseStyle = a.getInt(R.styleable.QuickSideBarView_sidebarTextStyle, STYLE_NORMAL);
+            textHasStyle = a.getInt(R.styleable.QuickSideBarView_sidebarTextStyle, STYLE_NORMAL);
             a.recycle();
         }
     }
@@ -118,7 +129,8 @@ public class QuickSideBarView extends View {
         paint.setAntiAlias(true);
 
         paint.setTextSize(Math.max(textSizeChoose, Math.max(textSizeHas, textSize)));
-
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT,
+                Math.max(textStyle, Math.max(textChooseStyle, textHasStyle))));
         int lettersHeight = 0;
         float rectMaxHeight = 0f;
         float rectMaxWith = 0f;
@@ -181,12 +193,15 @@ public class QuickSideBarView extends View {
                 if (i == choose) {
                     paint.setColor(textColorChoose);
                     paint.setTextSize(textSizeChoose);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, textChooseStyle));
                 } else if (hasLetters.contains(s)) {
                     paint.setColor(textColorHas);
                     paint.setTextSize(textSizeHas);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, textHasStyle));
                 } else {
                     paint.setColor(textColor);
                     paint.setTextSize(textSize);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, textStyle));
                 }
                 rect.setEmpty();
                 paint.getTextBounds(s, 0, s.length(), rect);

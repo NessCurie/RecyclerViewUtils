@@ -29,9 +29,12 @@
         android:visibility="gone"
         app:sidebarChooseTextColor="@color/colorPrimaryDark"
         app:sidebarChooseTextSize="20sp"
+        app:sidebarChooseTextStyle="bold"
+        app:sidebarHasTextStyle="bold"
         app:sidebarOrientation="horizontal"
         app:sidebarTextColor="@color/colorPrimary"
-        app:sidebarTextSize="20sp" />
+        app:sidebarTextSize="20sp"
+        app:sidebarTextStyle="bold" />
 
     <FrameLayout
         android:id="@+id/flSideBarTips"
