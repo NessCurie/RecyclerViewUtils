@@ -12,12 +12,49 @@
     <declare-styleable name="HFRefreshLayout">
         <attr name="footerNestLayout" format="reference" />
         <attr name="headerNestLayout" format="reference" />
+        <attr name="orientation">
+            <!-- Defines an horizontal widget. -->
+            <enum name="horizontal" value="0" />
+            <!-- Defines a vertical widget. -->
+            <enum name="vertical" value="1" />
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="QuickSideBarView">
         <attr name="sidebarTextColor" format="color|reference" />
         <attr name="sidebarChooseTextColor" format="color|reference" />
+        <attr name="sidebarHasTextColor" format="color|reference" />
         <attr name="sidebarTextSize" format="dimension" />
         <attr name="sidebarChooseTextSize" format="dimension" />
+        <attr name="sidebarHasTextSize" format="dimension" />
+        <attr name="sidebarTextGravity">
+            <flag name="center" value="0" />
+            <flag name="top" value="1" />
+            <flag name="bottom" value="2" />
+            <flag name="start" value="3" />
+            <flag name="end" value="4" />
+        </attr>
+        <attr name="sidebarOrientation">
+            <enum name="horizontal" value="0" />
+            <!-- Defines a vertical widget. -->
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="sidebarTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+        <attr name="sidebarChooseTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+            <flag name="bold_italic" value="3" />
+        </attr>
+        <attr name="sidebarHasTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+            <flag name="bold_italic" value="3" />
+        </attr>
     </declare-styleable>
 </resources>

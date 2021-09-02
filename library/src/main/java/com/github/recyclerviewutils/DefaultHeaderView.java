@@ -28,6 +28,7 @@ public class DefaultHeaderView extends RelativeLayout implements HFRefreshLayout
     private String stateReadyHint;
     private String stateRefreshingHint;
     private String stateSuccessHint;
+    private int orientation;
 
     public DefaultHeaderView(Context context) {
         this(context, null);
@@ -39,11 +40,22 @@ public class DefaultHeaderView extends RelativeLayout implements HFRefreshLayout
 
     public DefaultHeaderView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initView(context);
+    }
+
+    @Override
+    public void onOrientationConfirm(int orientation) {
+        this.orientation = orientation;
+        initView(getContext());
     }
 
     private void initView(Context context) {
-        View.inflate(context, R.layout.view_header, this);
+        if (orientation == HFRefreshLayout.VERTICAL) {
+            View.inflate(context, R.layout.view_header, this);
+            stateNormalHint = context.getString(R.string.loader_pull_load);
+        } else {
+            View.inflate(context, R.layout.view_header_horizontal, this);
+            stateNormalHint = context.getString(R.string.loader_pull_load_horizontal);
+        }
         ivIcon = findViewById(R.id.iv_icon);
         tvHint = findViewById(R.id.tv_hint);
 
@@ -63,14 +75,13 @@ public class DefaultHeaderView extends RelativeLayout implements HFRefreshLayout
         rotateAnim.setRepeatMode(ObjectAnimator.RESTART);
         rotateAnim.setInterpolator(new LinearInterpolator());
 
-        stateNormalHint = context.getString(R.string.loader_pull_load);
         stateReadyHint = context.getString(R.string.loader_pull_ready);
         stateRefreshingHint = context.getString(R.string.loader_loading);
         stateSuccessHint = context.getString(R.string.loader_success);
     }
 
     @Override
-    public void refreshScrollRate(int y) {
+    public void refreshScrollRate(int offset) {
     }
 
     public void onStateChange(int state) {
@@ -84,7 +95,11 @@ public class DefaultHeaderView extends RelativeLayout implements HFRefreshLayout
             rotateAnim.pause();
         } else {
             ivIcon.setRotation(0);
-            ivIcon.setBackgroundResource(R.drawable.ic_pull_refresh);
+            if (orientation == HFRefreshLayout.VERTICAL) {
+                ivIcon.setBackgroundResource(R.drawable.ic_pull_refresh);
+            } else {
+                ivIcon.setBackgroundResource(R.drawable.ic_pull_refresh_horizontal);
+            }
         }
         switch (state) {
             case STATE_NORMAL:

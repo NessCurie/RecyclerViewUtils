@@ -31,6 +31,9 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
     private static final int INVALID_POINTER_ID = -1;
     private static final int DROP_CIRCLE_ANIMATOR_DURATION = 200;
 
+    public static final int HORIZONTAL = 0;
+    public static final int VERTICAL = 1;
+
     private final int[] parentOffsetInWindow = new int[2];
     private final int[] parentScrollConsumed = new int[2];
     private NestedScrollingParentHelper nestedScrollingParentHelper;
@@ -39,10 +42,12 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
     private boolean nestedScrollInProgress;
     private boolean isRequestedLayout = false;
     private int activePointerId;
-    private float firstTouchDownPointY; //第一次点击的位置
+    private float firstTouchDownPoint; //第一次点击的位置
     private int totalOffset;            //总偏移值
     private int lastEventOffset;        //最后touch事件偏移值
     private MotionEvent lastMoveEvent;
+
+    private int orientation = VERTICAL;
 
     public interface LoaderDecor {
         /**
@@ -66,12 +71,14 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
          */
         int STATE_HAS_LOAD_ALL = 4;
 
+        void onOrientationConfirm(int orientation);
+
         /**
          * 滑动时调用
          *
-         * @param y 下拉的距离
+         * @param offset 滑动的距离
          */
-        void refreshScrollRate(int y);
+        void refreshScrollRate(int offset);
 
         /**
          * 状态改变
@@ -112,6 +119,7 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
     private boolean isLoadMoreListenerInvoked = false;
     private boolean isNoMoreLoaded = false;
     private boolean onLoadingMore;
+
     private boolean attached;
 
     public HFRefreshLayout(Context context) {
@@ -143,10 +151,14 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
                 footerViewResource = a.getResourceId(attr, R.layout.layout_list_loadmore);
             } else if (attr == R.styleable.HFRefreshLayout_headerNestLayout) {
                 headerViewResource = a.getResourceId(attr, R.layout.layout_list_refresh);
+            } else if (attr == R.styleable.HFRefreshLayout_orientation) {
+                orientation = a.getInt(attr, VERTICAL);
             }
         }
-        setFooterView(View.inflate(context, footerViewResource, null));
         setHeaderView(View.inflate(context, headerViewResource, null));
+        setFooterView(View.inflate(context, footerViewResource, null));
+        ((LoaderDecor) footerView).onOrientationConfirm(orientation);
+        ((LoaderDecor) headerView).onOrientationConfirm(orientation);
         a.recycle();
     }
 
@@ -167,7 +179,11 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
 
     @Override
     public boolean onStartNestedScroll(@NonNull View child, @NonNull View target, int nestedScrollAxes) {
-        return isEnabled() && (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
+        if (orientation == VERTICAL) {
+            return isEnabled() && (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
+        } else {
+            return isEnabled() && (nestedScrollAxes & ViewCompat.SCROLL_AXIS_HORIZONTAL) != 0;
+        }
     }
 
     @Override
@@ -176,17 +192,31 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         nestedScrollInProgress = true;
         nestedScrollingParentHelper.onNestedScrollAccepted(child, target, axes);
         // Dispatch up to the nested parent
-        startNestedScroll(axes & ViewCompat.SCROLL_AXIS_VERTICAL);
+        if (orientation == VERTICAL) {
+            startNestedScroll(axes & ViewCompat.SCROLL_AXIS_VERTICAL);
+        } else {
+            startNestedScroll(axes & ViewCompat.SCROLL_AXIS_HORIZONTAL);
+        }
     }
 
     @Override
     public void onNestedPreScroll(@NonNull View target, int dx, int dy, @NonNull int[] consumed) {
-        int oldScrollY = totalOffset;
-        if (dy * oldScrollY > 0) {
-            final int moveY = Math.abs(dy) > Math.abs(oldScrollY) ? oldScrollY : dy;
-            consumed[1] = moveY;
-            if (offsetLayout(-moveY)) {
-                totalOffset -= moveY;
+        int oldScroll = totalOffset;
+        if (orientation == VERTICAL) {
+            if (dy * oldScroll > 0) {
+                final int moveY = Math.abs(dy) > Math.abs(oldScroll) ? oldScroll : dy;
+                consumed[1] = moveY;
+                if (offsetLayout(-moveY)) {
+                    totalOffset -= moveY;
+                }
+            }
+        } else {
+            if (dx * oldScroll > 0) {
+                final int moveX = Math.abs(dx) > Math.abs(oldScroll) ? oldScroll : dx;
+                consumed[0] = moveX;
+                if (offsetLayout(-moveX)) {
+                    totalOffset -= moveX;
+                }
             }
         }
         // Now let our nested parent consume the leftovers
@@ -221,15 +251,29 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         // nested scrolling parent has stopped handling events. We do that by using the
         // 'offset in window 'functionality to see if we have been moved from the event.
         // This is a decent indication of whether we should take over the event stream or not.
-        int dy = dyUnconsumed + parentOffsetInWindow[1];
-        dy /= 2;
-        if (dy < 0 && isEnableRefresh) {
-            if (offsetLayout(-dy)) {
-                totalOffset -= dy;
+        if (orientation == VERTICAL) {
+            int dy = dyUnconsumed + parentOffsetInWindow[1];
+            dy /= 2;
+            if (dy < 0 && isEnableRefresh) {
+                if (offsetLayout(-dy)) {
+                    totalOffset -= dy;
+                }
+            } else if (dy > 0 && isEnableLoadMore) {
+                if (offsetLayout(-dy)) {
+                    totalOffset -= dy;
+                }
             }
-        } else if (dy > 0 && isEnableLoadMore) {
-            if (offsetLayout(-dy)) {
-                totalOffset -= dy;
+        } else {
+            int dx = dxUnconsumed + parentOffsetInWindow[1];
+            dx /= 2;
+            if (dx < 0 && isEnableRefresh) {
+                if (offsetLayout(-dx)) {
+                    totalOffset -= dx;
+                }
+            } else if (dx > 0 && isEnableLoadMore) {
+                if (offsetLayout(-dx)) {
+                    totalOffset -= dx;
+                }
             }
         }
     }
@@ -399,21 +443,17 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
                 final int childWidthMeasureSpec;
                 if (lp.width == LayoutParams.MATCH_PARENT) {
                     final int width = Math.max(0, getMeasuredWidth());
-                    childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
-                            width, MeasureSpec.EXACTLY);
+                    childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
                 } else {
-                    childWidthMeasureSpec = getChildMeasureSpec(widthMeasureSpec, 0,
-                            lp.width);
+                    childWidthMeasureSpec = getChildMeasureSpec(widthMeasureSpec, 0, lp.width);
                 }
 
                 final int childHeightMeasureSpec;
                 if (lp.height == LayoutParams.MATCH_PARENT) {
                     final int height = Math.max(0, getMeasuredHeight());
-                    childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-                            height, MeasureSpec.EXACTLY);
+                    childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
                 } else {
-                    childHeightMeasureSpec = getChildMeasureSpec(heightMeasureSpec, 0,
-                            lp.height);
+                    childHeightMeasureSpec = getChildMeasureSpec(heightMeasureSpec, 0, lp.height);
                 }
 
                 child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
@@ -440,12 +480,23 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         if (contentView != null) {
             contentView.layout(0, 0, contentView.getMeasuredWidth(), contentView.getMeasuredHeight());
         }
-        if (headerView != null) {
-            headerView.layout(0, 0 - headerView.getMeasuredHeight(), headerView.getMeasuredWidth(), 0);
-        }
-        if (footerView != null) {
-            footerView.layout(0, getMeasuredHeight(), footerView.getMeasuredWidth(),
-                    getMeasuredHeight() + footerView.getMeasuredHeight());
+        if (orientation == VERTICAL) {
+            if (headerView != null) {
+                headerView.layout(0, -headerView.getMeasuredHeight(), headerView.getMeasuredWidth(), 0);
+            }
+            if (footerView != null) {
+                footerView.layout(0, getMeasuredHeight(), footerView.getMeasuredWidth(),
+                        getMeasuredHeight() + footerView.getMeasuredHeight());
+            }
+        } else {
+            if (headerView != null) {
+                headerView.layout(-headerView.getMeasuredWidth(), 0, 0, headerView.getMeasuredHeight());
+            }
+            if (footerView != null) {
+                footerView.layout(getMeasuredWidth(), 0,
+                        getMeasuredWidth() + footerView.getMeasuredWidth(),
+                        footerView.getMeasuredHeight());
+            }
         }
         if (!isInitialized) {
             isInitialized = true;
@@ -530,44 +581,79 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
     }
 
     // 加载更多判断
-    protected boolean offsetLayout(float delY) {
-        scrollBy(0, (int) -delY);
+    protected boolean offsetLayout(float del) {
+        if (orientation == VERTICAL) {
+            scrollBy(0, (int) -del);
+        } else {
+            scrollBy((int) -del, 0);
+        }
         return true;
     }
 
     @Override
     public void computeScroll() {
         if (!scroller.isFinished() && scroller.computeScrollOffset()) {
-            int y = scroller.getCurrY();
-            int oldY = getScrollY();
-            scrollTo(0, y);
-            totalOffset -= y - oldY;
-            ViewCompat.postInvalidateOnAnimation(this);
+            if (orientation == VERTICAL) {
+                int y = scroller.getCurrY();
+                int oldY = getScrollY();
+                scrollTo(0, y);
+                totalOffset -= y - oldY;
+                ViewCompat.postInvalidateOnAnimation(this);
+            } else {
+                int x = scroller.getCurrX();
+                int oldX = getScrollX();
+                scrollTo(x, 0);
+                totalOffset -= x - oldX;
+                ViewCompat.postInvalidateOnAnimation(this);
+            }
         } else super.computeScroll();
     }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        if (t > 0 && !isLoadingMore() && isLoadMoreEnable() && !isLoadAll()) {
-            if (t > footerView.getMeasuredHeight()) {
-                ((LoaderDecor) footerView).onStateChange(LoaderDecor.STATE_READY);
-            } else {
-                if (!isOnLoadMoreFinished) {
-                    ((LoaderDecor) footerView).onStateChange(LoaderDecor.STATE_NORMAL);
+        if (orientation == VERTICAL) {
+            if (t > 0 && !isLoadingMore() && isLoadMoreEnable() && !isLoadAll()) {
+                if (t > footerView.getMeasuredHeight()) {
+                    ((LoaderDecor) footerView).onStateChange(LoaderDecor.STATE_READY);
+                } else {
+                    if (!isOnLoadMoreFinished) {
+                        ((LoaderDecor) footerView).onStateChange(LoaderDecor.STATE_NORMAL);
+                    }
+                }
+            }
+            if (t < 0 && !isRefreshing() && isRefreshEnable()) { // 未处于刷新状态，更新箭头
+                ((LoaderDecor) headerView).refreshScrollRate(getOffset());
+                if (getScrollY() < -headerView.getMeasuredHeight()) {
+                    ((LoaderDecor) headerView).onStateChange(LoaderDecor.STATE_READY);
+                } else {
+                    if (!isOnRefreshingFinished) {
+                        ((LoaderDecor) headerView).onStateChange(LoaderDecor.STATE_NORMAL);
+                    }
+                }
+            }
+        } else {
+            if (l > 0 && !isLoadingMore() && isLoadMoreEnable() && !isLoadAll()) {
+                if (l > footerView.getMeasuredWidth()) {
+                    ((LoaderDecor) footerView).onStateChange(LoaderDecor.STATE_READY);
+                } else {
+                    if (!isOnLoadMoreFinished) {
+                        ((LoaderDecor) footerView).onStateChange(LoaderDecor.STATE_NORMAL);
+                    }
+                }
+            }
+            if (l < 0 && !isRefreshing() && isRefreshEnable()) {
+                ((LoaderDecor) headerView).refreshScrollRate(getOffset());
+                if (getScrollX() < -headerView.getMeasuredWidth()) {
+                    ((LoaderDecor) headerView).onStateChange(LoaderDecor.STATE_READY);
+                } else {
+                    if (!isOnRefreshingFinished) {
+                        ((LoaderDecor) headerView).onStateChange(LoaderDecor.STATE_NORMAL);
+                    }
                 }
             }
         }
-        if (t < 0 && !isRefreshing() && isRefreshEnable()) { // 未处于刷新状态，更新箭头
-            ((LoaderDecor) headerView).refreshScrollRate(getOffsetY());
-            if (getScrollY() < -headerView.getMeasuredHeight()) {
-                ((LoaderDecor) headerView).onStateChange(LoaderDecor.STATE_READY);
-            } else {
-                if (!isOnRefreshingFinished) {
-                    ((LoaderDecor) headerView).onStateChange(LoaderDecor.STATE_NORMAL);
-                }
-            }
-        }
+
     }
 
     @Override
@@ -583,28 +669,52 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
     }
 
     protected void touchUp() {
-        if (getScrollY() < -headerView.getMeasuredHeight()) {// 下拉
-            invokeRefresh();
-        } else {
-            if (footerView.getMeasuredHeight() <= getScrollY() && !isLoadAll()) {
-                invokeLoadMore();
+        if (orientation == VERTICAL) {
+            if (getScrollY() < -headerView.getMeasuredHeight()) {// 下拉
+                invokeRefresh();
             } else {
-                if (!isRefreshing() && !isLoadingMore()) {
-                    resetView();
+                if (footerView.getMeasuredHeight() <= getScrollY() && !isLoadAll()) {
+                    invokeLoadMore();
+                } else {
+                    if (!isRefreshing() && !isLoadingMore()) {
+                        resetView();
+                    }
+                }
+            }
+        } else {
+            if (getScrollX() < -headerView.getMeasuredWidth()) {
+                invokeRefresh();
+            } else {
+                if (footerView.getMeasuredWidth() <= getScrollX() && !isLoadAll()) {
+                    invokeLoadMore();
+                } else {
+                    if (!isRefreshing() && !isLoadingMore()) {
+                        resetView();
+                    }
                 }
             }
         }
+
     }
 
     protected void invokeRefresh() {
         ((LoaderDecor) headerView).onStateChange(LoaderDecor.STATE_REFRESHING);
         onRefreshing = true;
         removeCallbacks(refreshRunnable);
-        if (attached) {
-            postDelayed(refreshRunnable, animation2Y(-headerView.getMeasuredHeight()));
+        if (orientation == VERTICAL) {
+            if (attached) {
+                postDelayed(refreshRunnable, animation2Y(-headerView.getMeasuredHeight()));
+            } else {
+                new Handler().postDelayed(refreshRunnable, animation2Y(-headerView.getMeasuredHeight()));
+            }
         } else {
-            new Handler().postDelayed(refreshRunnable, animation2Y(-headerView.getMeasuredHeight()));
+            if (attached) {
+                postDelayed(refreshRunnable, animation2X(-headerView.getMeasuredWidth()));
+            } else {
+                new Handler().postDelayed(refreshRunnable, animation2X(-headerView.getMeasuredWidth()));
+            }
         }
+
     }
 
     private Runnable refreshRunnable = new Runnable() {
@@ -623,10 +733,18 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         ((LoaderDecor) footerView).onStateChange(LoaderDecor.STATE_REFRESHING);
         onLoadingMore = true;
         removeCallbacks(loadMoreRunnable);
-        if (attached) {
-            postDelayed(loadMoreRunnable, animation2Y(footerView.getMeasuredHeight()));
+        if (orientation == VERTICAL) {
+            if (attached) {
+                postDelayed(loadMoreRunnable, animation2Y(footerView.getMeasuredHeight()));
+            } else {
+                new Handler().postDelayed(loadMoreRunnable, animation2Y(footerView.getMeasuredHeight()));
+            }
         } else {
-            new Handler().postDelayed(loadMoreRunnable, animation2Y(footerView.getMeasuredHeight()));
+            if (attached) {
+                postDelayed(loadMoreRunnable, animation2X(footerView.getMeasuredWidth()));
+            } else {
+                new Handler().postDelayed(loadMoreRunnable, animation2X(footerView.getMeasuredWidth()));
+            }
         }
     }
 
@@ -642,12 +760,25 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         }
     };
 
-    protected int getOffsetY() {
+    protected int getOffset() {
         return totalOffset;
     }
 
     protected void resetView() {
-        animation2Y(0);
+        if (orientation == VERTICAL) {
+            animation2Y(0);
+        } else {
+            animation2X(0);
+        }
+    }
+
+    protected int animation2X(int x) {
+        scroller.abortAnimation();
+        int duration = Math.abs(x - getScrollX());
+        duration = Math.max(DROP_CIRCLE_ANIMATOR_DURATION, duration);
+        scroller.startScroll(getScrollX(), 0, x - getScrollX(), 0, duration);
+        ViewCompat.postInvalidateOnAnimation(this);
+        return duration;
     }
 
     protected int animation2Y(int y) {
@@ -671,11 +802,20 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         onRefreshing = false;
         isRefreshListenerInvoked = false;
         ((LoaderDecor) headerView).onStateChange(LoaderDecor.STATE_SUCCESS);
-        if (attached) {
-            postDelayed(() -> postDelayed(() -> isOnRefreshingFinished = false, animation2Y(0)), delayMillis);
+        if (orientation == VERTICAL) {
+            if (attached) {
+                postDelayed(() -> postDelayed(() -> isOnRefreshingFinished = false, animation2Y(0)), delayMillis);
+            } else {
+                new Handler().postDelayed(() -> postDelayed(() -> isOnRefreshingFinished = false, animation2Y(0)), delayMillis);
+            }
         } else {
-            new Handler().postDelayed(() -> postDelayed(() -> isOnRefreshingFinished = false, animation2Y(0)), delayMillis);
+            if (attached) {
+                postDelayed(() -> postDelayed(() -> isOnRefreshingFinished = false, animation2X(0)), delayMillis);
+            } else {
+                new Handler().postDelayed(() -> postDelayed(() -> isOnRefreshingFinished = false, animation2X(0)), delayMillis);
+            }
         }
+
     }
 
     private boolean isOnLoadMoreFinished = false;
@@ -686,10 +826,18 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         isLoadMoreListenerInvoked = false;
         isNoMoreLoaded = false;
         ((LoaderDecor) footerView).onStateChange(LoaderDecor.STATE_SUCCESS);
-        if (attached) {
-            postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2Y(0)), delayMillis);
+        if (orientation == VERTICAL) {
+            if (attached) {
+                postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2Y(0)), delayMillis);
+            } else {
+                new Handler().postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2Y(0)), delayMillis);
+            }
         } else {
-            new Handler().postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2Y(0)), delayMillis);
+            if (attached) {
+                postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2X(0)), delayMillis);
+            } else {
+                new Handler().postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2X(0)), delayMillis);
+            }
         }
     }
 
@@ -699,10 +847,18 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         isLoadMoreListenerInvoked = false;
         isNoMoreLoaded = true;
         ((LoaderDecor) footerView).onStateChange(LoaderDecor.STATE_HAS_LOAD_ALL);
-        if (attached) {
-            postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2Y(0)), delayMillis);
+        if (orientation == VERTICAL) {
+            if (attached) {
+                postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2Y(0)), delayMillis);
+            } else {
+                new Handler().postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2Y(0)), delayMillis);
+            }
         } else {
-            new Handler().postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2Y(0)), delayMillis);
+            if (attached) {
+                postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2X(0)), delayMillis);
+            } else {
+                new Handler().postDelayed(() -> postDelayed(() -> isOnLoadMoreFinished = false, animation2X(0)), delayMillis);
+            }
         }
     }
 
@@ -722,8 +878,8 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 activePointerId = event.getPointerId(0);
-                firstTouchDownPointY = getMotionEventY(event, activePointerId);
-                lastEventOffset = (int) firstTouchDownPointY;
+                firstTouchDownPoint = getMotionEvent(event, activePointerId);
+                lastEventOffset = (int) firstTouchDownPoint;
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -731,23 +887,48 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
                     return false;
                 }
 
-                final float currentY = getMotionEventY(event, activePointerId);
+                final float currentX = getMotionEvent(event, activePointerId);
+                final float currentY = getMotionEvent(event, activePointerId);
 
-                if (currentY == -1) {
-                    return false;
+                if (orientation == VERTICAL) {
+                    if (currentY == -1) {
+                        return false;
+                    }
+                } else {
+                    if (currentX == -1) {
+                        return false;
+                    }
                 }
 
-                if (firstTouchDownPointY == -1) {
-                    firstTouchDownPointY = currentY;
+                if (firstTouchDownPoint == -1) {
+                    if (orientation == VERTICAL) {
+                        firstTouchDownPoint = currentY;
+                    } else {
+                        firstTouchDownPoint = currentX;
+                    }
                 }
-                if (lastEventOffset == -1)
-                    lastEventOffset = (int) currentY;
+                if (lastEventOffset == -1) {
+                    if (orientation == VERTICAL) {
+                        lastEventOffset = (int) currentY;
+                    } else {
+                        lastEventOffset = (int) currentX;
+                    }
+                }
 
-                final float yDiff = currentY - firstTouchDownPointY;
+                if (orientation == VERTICAL) {
+                    final float yDiff = currentY - firstTouchDownPoint;
 
-                // State is changed to drag if over slop
-                if (Math.abs(yDiff) > ViewConfiguration.get(getContext()).getScaledTouchSlop()) {
-                    return shouldIntercept((int) yDiff);
+                    // State is changed to drag if over slop
+                    if (Math.abs(yDiff) > ViewConfiguration.get(getContext()).getScaledTouchSlop()) {
+                        return shouldIntercept((int) yDiff);
+                    }
+                } else {
+                    final float xDiff = currentX - firstTouchDownPoint;
+
+                    // State is changed to drag if over slop
+                    if (Math.abs(xDiff) > ViewConfiguration.get(getContext()).getScaledTouchSlop()) {
+                        return shouldIntercept((int) xDiff);
+                    }
                 }
                 break;
 
@@ -767,7 +948,26 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
             return false;
         }
         dis = -dis;
-        return !canScrollVertically(dis) && (dis < 0 ? isEnableRefresh : isEnableLoadMore);
+        if (orientation == VERTICAL) {
+            return !canScrollVertically(dis) && (dis < 0 ? isEnableRefresh : isEnableLoadMore);
+        } else {
+            return !canScrollHorizontally(dis) && (dis < 0 ? isEnableRefresh : isEnableLoadMore);
+        }
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @Override
+    public boolean canScrollHorizontally(int direction) {
+        if (android.os.Build.VERSION.SDK_INT < 14) {
+            if (contentView instanceof AdapterView) {
+                return canListScroll(direction);
+            } else {
+                return direction < 0 ? contentView.getScrollX() > 0
+                        : contentView.getScrollX() < contentView.getMeasuredWidth();
+            }
+        } else {
+            return contentView.canScrollHorizontally(direction);
+        }
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -811,12 +1011,12 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         return true;
     }
 
-    private float getMotionEventY(@NonNull MotionEvent ev, int activePointerId) {
+    private float getMotionEvent(@NonNull MotionEvent ev, int activePointerId) {
         final int index = ev.findPointerIndex(activePointerId);
         if (index < 0) {
             return -1;
         }
-        return ev.getY(index);
+        return orientation == VERTICAL ? ev.getY(index) : ev.getX(index);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -840,7 +1040,7 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
                 }
                 touchUp();
                 lastEventOffset = -1;
-                firstTouchDownPointY = -1;
+                firstTouchDownPoint = -1;
                 activePointerId = INVALID_POINTER_ID;
                 return false;
         }
@@ -855,24 +1055,44 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
     }
 
     private boolean onMoveTouchEvent(@NonNull MotionEvent event, int pointerIndex) {
-        if (IsBeingDropped()) {
+        if (isBeingDropped()) {
             return false;
         }
-        final float y = event.getY(pointerIndex);
-        float diffY = y - lastEventOffset;
-        diffY /= 2;
-        if (diffY >= 0 && !isRefreshEnable() || (diffY < 0 && !isLoadMoreEnable()))
-            return false;
-        lastEventOffset = (int) y;
-        if (!shouldIntercept((int) (totalOffset + diffY))) {
-            sendUpEvent();
-            sendDownEvent();
-            return false;
+
+        if (orientation == VERTICAL) {
+            final float y = event.getY(pointerIndex);
+            float diffY = y - lastEventOffset;
+            diffY /= 2;
+            if (diffY >= 0 && !isRefreshEnable() || (diffY < 0 && !isLoadMoreEnable()))
+                return false;
+            lastEventOffset = (int) y;
+            if (!shouldIntercept((int) (totalOffset + diffY))) {
+                sendUpEvent();
+                sendDownEvent();
+                return false;
+            }
+            if (offsetLayout(diffY)) {
+                totalOffset += diffY;
+                return true;
+            }
+        } else {
+            final float x = event.getX(pointerIndex);
+            float diffX = x - lastEventOffset;
+            diffX /= 2;
+            if (diffX >= 0 && !isRefreshEnable() || (diffX < 0 && !isLoadMoreEnable()))
+                return false;
+            lastEventOffset = (int) x;
+            if (!shouldIntercept((int) (totalOffset + diffX))) {
+                sendUpEvent();
+                sendDownEvent();
+                return false;
+            }
+            if (offsetLayout(diffX)) {
+                totalOffset += diffX;
+                return true;
+            }
         }
-        if (offsetLayout(diffY)) {
-            totalOffset += diffY;
-            return true;
-        }
+
         return false;
     }
 
@@ -890,7 +1110,7 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
         dispatchTouchEvent(e);
     }
 
-    protected boolean IsBeingDropped() {
+    protected boolean isBeingDropped() {
         return false;
     }
 
@@ -899,7 +1119,11 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
      */
     @Override
     protected LayoutParams generateDefaultLayoutParams() {
-        return new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        if (orientation == VERTICAL) {
+            return new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        } else {
+            return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        }
     }
 
     public void setRefreshOnStateNormalHint(String s) {

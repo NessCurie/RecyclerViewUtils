@@ -31,9 +31,9 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements ItemTouchDataCallBack {
 
-    private Context context;
-    private List<T> list;
-    private SparseArrayCompat<IType<T>> types = new SparseArrayCompat<>();
+    private final Context context;
+    private final List<T> list;
+    private final SparseArrayCompat<IType<T>> types = new SparseArrayCompat<>();
 
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
@@ -75,7 +75,8 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<MViewHolder> implements
     @NonNull
     @Override
     public MViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        MViewHolder holder = MViewHolder.createHolder(context, types.get(viewType).getLayoutId(), parent, helper);
+        MViewHolder holder = MViewHolder.createHolder(context,
+                types.get(viewType).getLayoutId(), parent, helper);
         onViewHolderCreated(holder);
         return holder;
     }

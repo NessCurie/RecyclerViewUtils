@@ -18,6 +18,7 @@ public class DefaultFooterView extends RelativeLayout implements HFRefreshLayout
     private String stateRefreshingHint;
     private String stateSuccessHint;
     private String stateHasLoadAllHint;
+    private int orientation;
 
     public DefaultFooterView(Context context) {
         this(context, null);
@@ -25,11 +26,20 @@ public class DefaultFooterView extends RelativeLayout implements HFRefreshLayout
 
     public DefaultFooterView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView(context);
+    }
+
+    @Override
+    public void onOrientationConfirm(int orientation) {
+        this.orientation = orientation;
+        initView(getContext());
     }
 
     private void initView(Context context) {
-        View.inflate(getContext(), R.layout.view_footer, this);
+        if (orientation == HFRefreshLayout.VERTICAL) {
+            View.inflate(getContext(), R.layout.view_footer, this);
+        } else {
+            View.inflate(getContext(), R.layout.view_footer_horizontal, this);
+        }
         progressBar = findViewById(R.id.pb_footer_progress);
         tvHint = findViewById(R.id.tv_hint);
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -44,7 +54,7 @@ public class DefaultFooterView extends RelativeLayout implements HFRefreshLayout
     }
 
     @Override
-    public void refreshScrollRate(int y) {
+    public void refreshScrollRate(int offset) {
     }
 
     @Override
