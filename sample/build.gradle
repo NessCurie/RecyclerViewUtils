@@ -24,8 +24,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.belerweb:pinyin4j:2.5.0'
-    //implementation project(':library')
-    implementation "com.github.NessCurie:RecyclerViewUtils:$recyclerViewUtilsVersion"
+    implementation project(':library')
+    //implementation "com.github.NessCurie:RecyclerViewUtils:$recyclerViewUtilsVersion"
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
 
 }

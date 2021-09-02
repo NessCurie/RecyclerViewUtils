@@ -3,7 +3,7 @@
 buildscript {
     ext.kotlin_version = '1.5.30'
     repositories {
-        jcenter()
+        mavenCentral()
         google()
     }
     dependencies {
@@ -15,8 +15,8 @@ buildscript {
 }
 allprojects {
     repositories {
-        jcenter()
         google()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }
@@ -24,7 +24,7 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 31
     compileSdkVersion = 31
-    recyclerViewUtilsVersion = '4.6.1x'
+    recyclerViewUtilsVersion = '4.6.2x'
 }
 task clean(type: Delete) {
     delete rootProject.buildDir
