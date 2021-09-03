@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
+apply plugin: 'kotlin-android'
 
-group = 'com.github.nesscurie'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        versionName "4.6.3x"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -18,17 +18,22 @@ dependencies {
     compileOnly 'androidx.recyclerview:recyclerview:1.2.0'
 }
 
-// 指定编码
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-// 打包源码
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+apply plugin: 'maven-publish'
+
+afterEvaluate {
+    publishing {
+        publications {
+            upload(MavenPublication) {
+                from components.release
+                groupId = 'com.github.nesscurie'
+                artifactId = "RecyclerViewUtils"
+                version = android.defaultConfig.versionName
+            }
+        }
+    }
 }
 
-artifacts {
-    archives sourcesJar
-}
