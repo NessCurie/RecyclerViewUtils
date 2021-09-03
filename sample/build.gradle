@@ -25,7 +25,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.belerweb:pinyin4j:2.5.0'
     implementation project(':library')
-    //implementation "com.github.NessCurie:RecyclerViewUtils:$recyclerViewUtilsVersion"
+    implementation "com.github.NessCurie:RecyclerViewUtils:$recyclerViewUtilsVersion"
     //implementation "com.github.NessCurie:RecyclerViewUtils:masterX-SNAPSHOT"
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
 }
