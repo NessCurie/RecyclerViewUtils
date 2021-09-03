@@ -18,11 +18,16 @@ dependencies {
     compileOnly 'androidx.recyclerview:recyclerview:1.2.0'
 }
 
+apply plugin: 'maven-publish'
+
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-apply plugin: 'maven-publish'
+task sourcesJar(type: Jar) {  // 打包源码
+    from android.sourceSets.main.java.srcDirs
+    getArchiveClassifier().set('sources')
+}
 
 afterEvaluate {
     publishing {
@@ -32,8 +37,8 @@ afterEvaluate {
                 groupId = 'com.github.nesscurie'
                 artifactId = "RecyclerViewUtils"
                 version = android.defaultConfig.versionName
+                artifact sourcesJar
             }
         }
     }
 }
-
