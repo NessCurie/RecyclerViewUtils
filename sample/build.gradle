@@ -27,5 +27,5 @@ dependencies {
     implementation project(':library')
     implementation "com.github.NessCurie:RecyclerViewUtils:$recyclerViewUtilsVersion"
     //implementation "com.github.NessCurie:RecyclerViewUtils:masterX-SNAPSHOT"
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 }
