@@ -7,7 +7,6 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionName "4.6.3x"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -36,7 +35,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.nesscurie'
                 artifactId = "RecyclerViewUtils"
-                version = android.defaultConfig.versionName
+                version = "4.6.3x"
                 artifact sourcesJar
             }
         }
