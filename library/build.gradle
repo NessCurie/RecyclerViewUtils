@@ -12,9 +12,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.github.recyclerviewutils'
 }
 dependencies {
-    compileOnly 'androidx.recyclerview:recyclerview:1.2.1'
+    compileOnly 'androidx.recyclerview:recyclerview:1.3.0'
 }
 
 apply plugin: 'maven-publish'
@@ -35,7 +36,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.nesscurie'
                 artifactId = "RecyclerViewUtils"
-                version = "4.6.3x"
+                version = "4.6.4x"
                 artifact sourcesJar
             }
         }

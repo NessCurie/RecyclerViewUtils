@@ -1,5 +1,6 @@
 package com.github.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvHfrefreshQuicksidebar.setOnClickListener(this);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         Intent intent = new Intent();
