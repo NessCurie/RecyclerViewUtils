@@ -1,7 +1,9 @@
 package com.github.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,7 +31,7 @@ public class MultipleActivity extends AppCompatActivity implements
     private List<String> list;
     private SwipyRefreshLayout swipyrefreshlayout;
     private RecyclerView recyclerview;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private BaseAdapter<String> adapter;
 
     @Override
@@ -135,6 +137,7 @@ public class MultipleActivity extends AppCompatActivity implements
         recyclerview.setAdapter(adapter);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onRefresh(int direction) {
         switch (direction) {
@@ -143,12 +146,9 @@ public class MultipleActivity extends AppCompatActivity implements
                 for (int i = 'A'; i < 'z'; i++) {
                     list.add("" + (char) i);
                 }
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                        swipyrefreshlayout.setRefreshing(false);
-                    }
+                handler.postDelayed(() -> {
+                    adapter.notifyDataSetChanged();
+                    swipyrefreshlayout.setRefreshing(false);
                 }, 2000);
                 break;
             case SwipyRefreshLayout.BOTTOM:
@@ -156,13 +156,10 @@ public class MultipleActivity extends AppCompatActivity implements
                 for (int i = 1; i < 9; i++) {
                     list.add("" + i);
                 }
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                        recyclerview.scrollToPosition(lastListSize);
-                        swipyrefreshlayout.setRefreshing(false);
-                    }
+                handler.postDelayed(() -> {
+                    adapter.notifyDataSetChanged();
+                    recyclerview.scrollToPosition(lastListSize);
+                    swipyrefreshlayout.setRefreshing(false);
                 }, 2000);
                 break;
         }

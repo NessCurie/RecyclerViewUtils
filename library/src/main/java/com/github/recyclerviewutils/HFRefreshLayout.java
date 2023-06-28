@@ -798,6 +798,7 @@ public class HFRefreshLayout extends ViewGroup implements NestedScrollingChild, 
     }
 
     public void onRefreshFinished(long delayMillis) {
+        removeCallbacks(refreshRunnable);
         isOnRefreshingFinished = true;
         onRefreshing = false;
         isRefreshListenerInvoked = false;

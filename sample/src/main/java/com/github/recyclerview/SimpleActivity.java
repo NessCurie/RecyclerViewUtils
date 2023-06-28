@@ -1,7 +1,9 @@
 package com.github.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -30,7 +32,7 @@ public class SimpleActivity extends AppCompatActivity implements
     private SwipyRefreshLayout swipyrefreshlayout;
     private RecyclerView recyclerview;
     private SimpleAdapter<String> simpleAdapter;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class SimpleActivity extends AppCompatActivity implements
         recyclerview.setAdapter(simpleAdapter);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onRefresh(int direction) {
         switch (direction) {
@@ -86,12 +89,9 @@ public class SimpleActivity extends AppCompatActivity implements
                 for (int i = 'A'; i < 'z'; i++) {
                     list.add("" + (char) i);
                 }
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        simpleAdapter.notifyDataSetChanged();
-                        swipyrefreshlayout.setRefreshing(false);
-                    }
+                handler.postDelayed(() -> {
+                    simpleAdapter.notifyDataSetChanged();
+                    swipyrefreshlayout.setRefreshing(false);
                 }, 2000);
                 break;
             case SwipyRefreshLayout.BOTTOM:
@@ -99,13 +99,10 @@ public class SimpleActivity extends AppCompatActivity implements
                 for (int i = 1; i < 9; i++) {
                     list.add("" + i);
                 }
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        simpleAdapter.notifyDataSetChanged();
-                        recyclerview.scrollToPosition(lastListSize);
-                        swipyrefreshlayout.setRefreshing(false);
-                    }
+                handler.postDelayed(() -> {
+                    simpleAdapter.notifyDataSetChanged();
+                    recyclerview.scrollToPosition(lastListSize);
+                    swipyrefreshlayout.setRefreshing(false);
                 }, 2000);
                 break;
         }

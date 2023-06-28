@@ -88,8 +88,8 @@ public class QuickSideBarView extends View {
             orientation = a.getInt(R.styleable.QuickSideBarView_sidebarOrientation, VERTICAL);
             gravity = a.getInt(R.styleable.QuickSideBarView_sidebarTextGravity, CENTER);
             textStyle = a.getInt(R.styleable.QuickSideBarView_sidebarTextStyle, 0);
-            textChooseStyle = a.getInt(R.styleable.QuickSideBarView_sidebarTextStyle, 0);
-            textHasStyle = a.getInt(R.styleable.QuickSideBarView_sidebarTextStyle, 0);
+            textChooseStyle = a.getInt(R.styleable.QuickSideBarView_sidebarChooseTextStyle, 0);
+            textHasStyle = a.getInt(R.styleable.QuickSideBarView_sidebarHasTextStyle, 0);
             a.recycle();
         }
     }
